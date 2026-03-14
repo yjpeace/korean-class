@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 01 문법 학습지 | 내가 좋아하는 가수</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --navy:#1B4F8A;
+  --blue:#1B4F8A;
+  --blue2:#2563B0;
+  --sky:#2563B0;
+  --sky2:#dbeafe;
+  --orange:#E07B30;
+  --orange2:#c85e10;
+  --orange-light:#fff3e8;
+  --green:#059669;
+  --green2:#047857;
+  --green-light:#d1fae5;
+  --red:#dc2626;
+  --red-light:#fee2e2;
+  --purple:#7c3aed;
+  --purple2:#6d28d9;
+  --purple-light:#ede9fe;
+  --white:#fff;
+  --card:#ffffff;
+  --card2:#f8fafc;
+  --card3:#f1f5f9;
+  --border:rgba(0,0,0,0.09);
+  --border2:rgba(0,0,0,0.14);
+  --text:#1e293b;
+  --muted:#64748b;
+  --radius:16px;
+  --radius-sm:10px;
+}
+
+html,body{min-height:100vh;font-family:'DM Sans','Noto Sans KR',sans-serif;background:#eef2f7;color:var(--text);overflow-x:hidden;}
+
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 40% at 10% 0%,rgba(37,99,176,0.05) 0%,transparent 55%),
+             radial-gradient(ellipse 50% 35% at 90% 100%,rgba(224,123,48,0.04) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 32px;background:rgba(255,255,255,0.88);backdrop-filter:blur(16px);box-shadow:0 1px 12px rgba(0,0,0,0.08);
+  border-bottom:1px solid var(--border);}
+.hd-left{display:flex;align-items:center;gap:12px;}
+.hd-badge{background:var(--orange);color:#fff;font-weight:800;font-size:11px;letter-spacing:.6px;
+  padding:4px 10px;border-radius:6px;text-transform:uppercase;}
+.hd-title{font-size:14px;font-weight:700;line-height:1.3;}
+.hd-sub{font-size:11px;color:#64748b;}
+.hd-right{display:flex;align-items:center;gap:10px;}
+.total-score{background:#fff;border:1px solid #e2e8f0;border-radius:99px;
+  padding:6px 14px;font-size:13px;font-weight:600;}
+.total-score .s{color:#d97706;font-weight:800;}
+.btn-reset{background:#f1f5f9;border:1px solid #e2e8f0;color:var(--text);
+  border-radius:9px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all .2s;}
+.btn-reset:hover{background:#e2e8f0;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;padding:18px 24px 0;position:relative;z-index:1;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:12px 12px 0 0;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-bottom:none;color:var(--muted);font-weight:600;
+  font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.tab.active{background:#fff;color:#1e40af;border-color:#e2e8f0;font-weight:700;}
+.tab:hover:not(.active){background:rgba(255,255,255,0.08);color:var(--text);}
+
+/* ── PANEL ── */
+.panel{display:none;position:relative;z-index:1;margin:0 18px 32px;background:var(--card);
+  border:1px solid var(--border2);border-radius:0 var(--radius) var(--radius) var(--radius);
+  padding:28px 32px;}
+.panel.active{display:block;}
+
+/* ── SECTION HEAD ── */
+.sec-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;}
+.sec-pill{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:4px 12px;border-radius:99px;flex-shrink:0;margin-top:3px;}
+.pill-blue{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;}
+.pill-orange{background:#fed7aa;color:#92400e;border:1px solid #fdba74;}
+.pill-green{background:#a7f3d0;color:#065f46;border:1px solid #6ee7b7;}
+.pill-purple{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;}
+.sec-title{font-size:17px;font-weight:700;}
+.sec-sub{font-size:13px;color:#64748b;margin-top:3px;line-height:1.5;}
+.divider{height:1px;background:#e2e8f0;margin:26px 0;}
+
+/* ── EXPLANATION BOX ── */
+.explain-box{border-radius:var(--radius-sm);overflow:hidden;margin-bottom:16px;}
+.explain-head{padding:12px 18px;display:flex;align-items:center;gap:10px;}
+.explain-head .icon{font-size:16px;}
+.explain-head .label{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;}
+.explain-body{padding:14px 18px;font-size:14px;line-height:1.8;}
+.explain-body strong{font-weight:700;}
+.explain-body .hl{color:#1d4ed8;font-weight:700;}
+.explain-body .hl-or{color:#c2410c;font-weight:700;}
+.explain-body .hl-gn{color:#065f46;font-weight:700;}
+.explain-body .hl-rd{color:#b91c1c;font-weight:700;}
+.explain-box.blue .explain-head{background:#dbeafe;}
+.explain-box.blue .explain-head .label{color:#1e40af;}
+.explain-box.blue .explain-body{background:#eff6ff;border-left:3px solid var(--blue2);}
+.explain-box.orange .explain-head{background:#fed7aa;}
+.explain-box.orange .explain-head .label{color:#92400e;}
+.explain-box.orange .explain-body{background:#fff7ed;border-left:3px solid var(--orange);}
+.explain-box.red .explain-head{background:#fecaca;}
+.explain-box.red .explain-head .label{color:#991b1b;}
+.explain-box.red .explain-body{background:#fef2f2;border-left:3px solid var(--red);}
+.explain-box.green .explain-head{background:#a7f3d0;}
+.explain-box.green .explain-head .label{color:#065f46;}
+.explain-box.green .explain-body{background:#f0fdf4;border-left:3px solid var(--green);}
+
+/* ── PATTERN BOX ── */
+.pattern-box{background:#f8fafc;border:1px solid var(--border2);border-radius:var(--radius-sm);
+  padding:16px 20px;margin:14px 0;font-size:15px;line-height:2;}
+.pattern-box .formula{font-family:monospace;font-size:14px;background:rgba(255,255,255,0.07);
+  border-radius:6px;padding:2px 8px;color:var(--sky);}
+
+/* ── CONJ GRID ── */
+.conj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.conj-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:var(--radius-sm);
+  overflow:hidden;}
+.conj-card-head{background:#dbeafe;padding:8px 14px;font-size:11px;font-weight:800;
+  letter-spacing:.5px;color:var(--sky);text-transform:uppercase;}
+.conj-card-body{padding:10px 14px;}
+.conj-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;}
+.conj-row:last-child{border-bottom:none;}
+.conj-base{color:#475569;}
+.conj-result{color:#1d4ed8;font-weight:700;}
+.conj-highlight{background:rgba(37,99,176,0.25);border-radius:6px;padding:6px 12px;margin-top:8px;
+  font-size:13px;color:var(--sky2);}
+
+/* ── EXAMPLE BLOCK ── */
+.ex-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:var(--radius-sm);
+  overflow:hidden;margin-bottom:10px;}
+.ex-num{min-width:36px;background:var(--blue2);color:#fff;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.ex-row{display:flex;align-items:stretch;}
+.ex-content{padding:12px 16px;flex:1;}
+.ex-kor{font-size:15px;line-height:1.6;}
+.ex-kor .gram{color:#c2410c;font-weight:700;}
+.ex-eng{font-size:12px;color:#64748b;margin-top:4px;font-style:italic;}
+.ex-dialog{padding:10px 16px;flex:1;}
+.ex-dialog .dia-a{font-size:14px;margin-bottom:6px;}
+.ex-dialog .dia-b{font-size:14px;color:var(--orange2);}
+.ex-dialog .dia-label{font-weight:800;margin-right:6px;}
+
+/* ── COMPARE TABLE (correct vs wrong) ── */
+.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.compare-card{border-radius:var(--radius-sm);overflow:hidden;}
+.compare-head{padding:10px 16px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+.compare-card.ok .compare-head{background:rgba(16,185,129,0.35);color:#6ee7b7;}
+.compare-card.ng .compare-head{background:rgba(239,68,68,0.3);color:#fca5a5;}
+.compare-body{padding:12px 16px;font-size:14px;line-height:1.7;}
+.compare-card.ok .compare-body{background:#f0fdf4;}
+.compare-card.ng .compare-body{background:#fef2f2;}
+.compare-body .note{font-size:12px;margin-top:6px;opacity:.7;font-style:italic;}
+
+/* ── DRILLS & EXERCISES ── */
+.drill-table{width:100%;border-collapse:collapse;}
+.drill-table th{background:#1d4ed8;color:#fff;font-size:12px;font-weight:700;
+  padding:10px 14px;text-align:left;}
+.drill-table th:first-child{border-radius:10px 0 0 0;width:36px;text-align:center;}
+.drill-table th:last-child{border-radius:0 10px 0 0;}
+.drill-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:14px;vertical-align:middle;}
+.drill-table tr:last-child td{border-bottom:none;}
+.drill-table tr.given-row td{background:#eff6ff;}
+.drill-table tr:not(.given-row):nth-child(even) td{background:#f8fafc;}
+.num-cell{text-align:center;color:var(--muted);font-size:12px;}
+.base-word{font-weight:700;color:#1d4ed8;}
+.type-label{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.07);
+  border-radius:99px;padding:2px 8px;display:inline-block;}
+.ans-input{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.18);
+  border-radius:8px;color:#fff;padding:6px 12px;font-size:14px;font-family:inherit;
+  width:100%;max-width:210px;transition:border-color .2s;outline:none;}
+.ans-input:focus{border-color:var(--sky);}
+.ans-input.correct{border-color:var(--green);background:rgba(16,185,129,0.1);}
+.ans-input.wrong{border-color:var(--red);background:rgba(239,68,68,0.08);}
+.shown-ans{font-weight:700;color:#1d4ed8;}
+.given-label{color:#64748b;font-style:italic;font-size:12px;}
+.ex-field{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);
+  border-radius:8px;color:#fff;padding:6px 12px;font-size:13px;font-family:inherit;
+  width:100%;outline:none;transition:border-color .2s;}
+.ex-field:focus{border-color:var(--sky);}
+
+/* ── MATCH ── */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.match-col-label{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;}
+.match-item{background:#f8fafc;border:2px solid #e2e8f0;
+  border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.4;cursor:pointer;
+  transition:all .18s;user-select:none;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.match-item:hover{background:#eff6ff;border-color:#93c5fd;}
+.match-item.selected{border-color:#3b82f6;background:#eff6ff;}
+.match-item.matched-ok{border-color:var(--green);background:rgba(16,185,129,0.12);cursor:default;}
+.match-item.matched-err{border-color:var(--red);background:rgba(239,68,68,0.1);animation:shake .3s;}
+.match-badge{min-width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,0.1);
+  color:var(--muted);display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;flex-shrink:0;}
+.match-item.selected .match-badge{background:#3b82f6;color:#fff;}
+.match-item.matched-ok .match-badge{background:var(--green);color:#fff;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ── DIALOG ── */
+.dialog-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+  overflow:hidden;margin-bottom:12px;}
+.dialog-row{display:flex;align-items:stretch;}
+.d-label{min-width:42px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;flex-shrink:0;}
+.d-label.a{background:var(--blue2);}
+.d-label.b{background:var(--orange);}
+.d-body{flex:1;padding:11px 16px;font-size:14px;line-height:1.5;}
+.d-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,0.18);
+  color:#fff;font-family:inherit;font-size:14px;outline:none;padding:2px 0 6px;transition:border-color .2s;}
+.d-input:focus{border-bottom-color:#3b82f6;}
+.d-suffix{color:#c2410c;font-weight:700;}
+
+/* ── OX ── */
+.ox-list{display:flex;flex-direction:column;gap:10px;}
+.ox-item{display:flex;align-items:flex-start;gap:12px;background:var(--card2);
+  border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.ox-num{min-width:26px;height:26px;border-radius:7px;background:#e2e8f0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  color:var(--muted);flex-shrink:0;margin-top:1px;}
+.ox-wrap{flex:1;}
+.ox-text{font-size:14px;line-height:1.5;margin-bottom:8px;}
+.ox-correct-note{font-size:12px;color:#fca5a5;margin-top:6px;font-style:italic;display:none;}
+.ox-btns{display:flex;gap:8px;}
+.ox-btn{padding:6px 18px;border-radius:8px;border:2px solid var(--border);background:transparent;
+  color:var(--muted);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;}
+.ox-btn:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.ox-btn.sel-o{border-color:var(--green);background:rgba(16,185,129,0.18);color:#6ee7b7;}
+.ox-btn.sel-x{border-color:var(--red);background:rgba(239,68,68,0.12);color:#fca5a5;}
+.ox-btn.is-correct{border-color:var(--green)!important;background:rgba(16,185,129,0.22)!important;color:#6ee7b7!important;}
+.ox-btn.is-wrong{border-color:var(--red)!important;background:rgba(239,68,68,0.18)!important;color:#fca5a5!important;}
+.ox-correction{display:none;margin-top:8px;font-size:13px;background:rgba(239,68,68,0.1);
+  border-radius:7px;padding:8px 12px;border-left:3px solid var(--red);}
+.ox-correction .label{color:#b91c1c;font-weight:700;font-size:11px;text-transform:uppercase;margin-bottom:3px;}
+
+/* ── WORD BANK ── */
+.word-bank{background:rgba(224,123,48,0.08);border:1px solid rgba(224,123,48,0.25);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+.wb-label{font-size:11px;font-weight:800;color:#c2410c;letter-spacing:.5px;margin-bottom:10px;}
+.wb-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.wb-chip{background:#fff;border:1.5px solid #d1d5db;
+  border-radius:99px;padding:5px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.wb-chip:hover:not(.used){background:#fff7ed;border-color:var(--orange);}
+.wb-chip.used{opacity:.3;text-decoration:line-through;cursor:default;}
+
+.fill-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:var(--card2);
+  border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin-bottom:10px;}
+.fill-n{font-size:12px;font-weight:800;color:#64748b;min-width:20px;}
+.fill-blank{display:inline-flex;align-items:center;justify-content:center;min-width:110px;
+  border-bottom:2px solid rgba(255,255,255,0.25);padding:3px 8px;font-size:14px;font-weight:700;
+  color:var(--orange2);cursor:pointer;transition:all .18s;border-radius:4px 4px 0 0;}
+.fill-blank:hover{background:rgba(255,255,255,0.05);border-bottom-color:var(--orange);}
+.fill-blank.active-blank{background:rgba(224,123,48,0.12);border-bottom-color:var(--orange);
+  box-shadow:0 0 0 2px rgba(224,123,48,0.3);}
+.fill-blank.filled{border-bottom-color:var(--green);color:#6ee7b7;}
+.fill-blank.wrong-fill{border-bottom-color:var(--red);color:#fca5a5;}
+.fill-text{font-size:14px;line-height:1.5;}
+
+/* ── BUILD-A-SENTENCE TABLE ── */
+.build-table{width:100%;border-collapse:collapse;}
+.build-table th{background:#047857;color:#fff;font-size:12px;font-weight:700;padding:10px 14px;text-align:left;}
+.build-table th:first-child{border-radius:10px 0 0 0;width:180px;}
+.build-table th:nth-child(2){width:200px;}
+.build-table th:last-child{border-radius:0 10px 0 0;}
+.build-table td{padding:10px 14px;border-bottom:1px solid #e2e8f0;font-size:14px;vertical-align:middle;}
+.build-table tr:nth-child(even) td{background:#f8fafc;}
+.build-table tr.sample-row td{background:#f0fdf4;}
+.topic-cell{color:#065f46;font-weight:600;}
+.idea-cell{color:#64748b;font-size:13px;}
+.build-input{width:100%;background:transparent;border:none;border-bottom:1.5px dashed rgba(255,255,255,0.18);
+  color:#fff;font-family:inherit;font-size:14px;outline:none;padding:4px 0;transition:border-color .2s;}
+.build-input:focus{border-bottom-color:#059669;}
+
+/* ── FREE WRITE ── */
+.free-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+  padding:14px 18px;margin-bottom:10px;}
+.free-num{font-size:11px;font-weight:800;color:#c2410c;letter-spacing:.4px;margin-bottom:8px;}
+.free-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,0.18);
+  color:#fff;font-family:inherit;font-size:15px;outline:none;padding:4px 0 8px;transition:border-color .2s;}
+.free-input:focus{border-bottom-color:#3b82f6;}
+
+/* ── COMBINED C ── */
+.choose-row{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;
+  border-radius:12px;padding:14px 18px;margin-bottom:10px;flex-wrap:wrap;}
+.choose-n{font-size:12px;font-weight:800;color:#6d28d9;min-width:24px;}
+.choose-text{font-size:15px;flex:1;}
+.choose-opts{display:flex;gap:8px;}
+.choose-btn{padding:6px 16px;border-radius:8px;border:2px solid var(--border);background:transparent;
+  color:var(--muted);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.choose-btn:hover{background:#f1f5f9;}
+.choose-btn.sel{border-color:#7c3aed;background:#ede9fe;color:#5b21b6;}
+.choose-btn.correct-pick{border-color:var(--green)!important;background:rgba(16,185,129,0.18)!important;color:#6ee7b7!important;}
+.choose-btn.wrong-pick{border-color:var(--red)!important;background:rgba(239,68,68,0.12)!important;color:#fca5a5!important;}
+
+.cblank-input{display:inline-block;background:rgba(255,255,255,0.07);border:none;
+  border-bottom:2px solid rgba(255,255,255,0.22);color:#fff;font-family:inherit;font-size:14px;
+  outline:none;padding:2px 8px;min-width:130px;transition:border-color .2s;}
+.cblank-input:focus{border-bottom-color:#7c3aed;}
+
+.chat-block{border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:8px;}
+.chat-row{display:flex;}
+.chat-lbl{min-width:42px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;flex-shrink:0;}
+.chat-lbl.a{background:var(--blue2);}
+.chat-lbl.b{background:var(--orange);}
+.chat-body{flex:1;padding:11px 16px;}
+.chat-inp{width:100%;background:transparent;border:none;border-bottom:1.5px dashed rgba(255,255,255,0.16);
+  color:#fff;font-family:inherit;font-size:14px;outline:none;padding:2px 0 6px;transition:border-color .2s;}
+.chat-inp:focus{border-bottom-color:#7c3aed;}
+
+/* ── CHECK BAR ── */
+.check-bar{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.btn-check{background:var(--orange);color:#fff;border:none;border-radius:11px;
+  padding:10px 24px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  transition:all .2s;box-shadow:0 4px 14px rgba(224,123,48,0.3);}
+.btn-check:hover{background:#c86e28;transform:translateY(-1px);}
+.btn-secondary{background:#f1f5f9;border:1px solid #e2e8f0;color:var(--text);
+  border-radius:11px;padding:9px 18px;font-family:inherit;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .2s;}
+.btn-secondary:hover{background:#e2e8f0;}
+.score-chip{background:#fff;border:1px solid #e2e8f0;border-radius:99px;
+  padding:7px 16px;font-size:13px;font-weight:600;}
+.score-chip .s{color:#d97706;font-weight:800;}
+.feedback{font-size:13px;font-weight:600;}
+
+/* ── INFO CHIPS ── */
+.info-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.info-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:12px;}
+.info-chip .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:99px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-left">
+    <div class="hd-badge">NAKS 4-2</div>
+    <div>
+      <div class="hd-title">Unit 01 문법 학습지 · Grammar Study Sheet</div>
+      <div class="hd-sub">내가 좋아하는 가수 · ~거든요 &amp; -치고</div>
+    </div>
+  </div>
+  <div class="hd-right">
+    <div class="total-score">총 점수 <span class="s" id="totalScore">0</span> / <span id="totalPoss">0</span></div>
+    <button class="btn-reset" onclick="resetAll()">🔄 전체 초기화</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('a')">📘 파트 A — ~거든(요)</button>
+  <button class="tab" onclick="switchTab('b')">📗 파트 B — -치고</button>
+  <button class="tab" onclick="switchTab('c')">🌟 파트 C — 종합 연습</button>
+</div>
+
+<!-- ════════ PANEL A ════════ -->
+<div class="panel active" id="panelA">
+
+  <!-- A-① 설명 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-①</span>
+    <div>
+      <div class="sec-title">설명 · Explanation</div>
+      <div class="sec-sub">먼저 설명을 읽고 이해해 보세요.</div>
+    </div>
+  </div>
+
+  <div class="explain-box blue">
+    <div class="explain-head"><span class="icon">🇺🇸</span><span class="label">English</span></div>
+    <div class="explain-body">
+      <strong>~거든(요)</strong> is used to give a <span class="hl">reason, background information, or a fact</span> about something that was <span class="hl">already mentioned</span> in the conversation.<br>
+      Think of it like saying <em>"…you know" / "…because" / "…you see"</em> at the end of a sentence.<br><br>
+      <span class="hl-rd">⚠️ Important:</span> You <strong>cannot</strong> use ~거든요 to <em>start</em> a conversation. There must already be something to respond to!
+    </div>
+  </div>
+
+  <div class="explain-box orange">
+    <div class="explain-head"><span class="icon">🇰🇷</span><span class="label">한국어</span></div>
+    <div class="explain-body">
+      <strong>~거든(요)</strong>는 이미 나온 이야기에 대해 <span class="hl-or">이유, 배경, 또는 사실</span>을 설명할 때 사용해요.<br>
+      "왜냐하면…", "사실은…", "~이거든" 처럼 뒷받침하는 말을 할 때 써요.<br><br>
+      <span class="hl-rd">⚠️ 주의:</span> 대화를 <strong>처음 시작</strong>할 때는 쓸 수 없어요. 반드시 앞에 이야기가 있어야 해요!
+    </div>
+  </div>
+
+  <!-- Conjugation -->
+  <div class="sec-head" style="margin-top:24px;">
+    <span class="sec-pill pill-blue">A-②</span>
+    <div>
+      <div class="sec-title">어떻게 만들어요? · How to Conjugate</div>
+      <div class="sec-sub">종류에 따라 형태가 달라져요.</div>
+    </div>
+  </div>
+
+  <div class="conj-grid">
+    <div class="conj-card">
+      <div class="conj-card-head">동사 (Verb) &amp; 형용사 (Adjective)</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">먹다</span><span class="conj-result">먹거든요</span></div>
+        <div class="conj-row"><span class="conj-base">귀엽다</span><span class="conj-result">귀엽거든요</span></div>
+        <div class="conj-row"><span class="conj-base">있다 / 없다</span><span class="conj-result">있거든요 / 없거든요</span></div>
+        <div class="conj-row"><span class="conj-base">눈길을 끌다</span><span class="conj-result">눈길을 끌거든요</span></div>
+        <div class="conj-highlight">어간 + 거든요</div>
+      </div>
+    </div>
+    <div class="conj-card">
+      <div class="conj-card-head">명사 + 이다 (Noun)</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">연예인 (받침 없음)</span><span class="conj-result">연예인이거든요</span></div>
+        <div class="conj-row"><span class="conj-base">방송 (받침 있음)</span><span class="conj-result">방송이거든요</span></div>
+        <div class="conj-row"><span class="conj-base">가수 (받침 없음)</span><span class="conj-result">가수거든요</span></div>
+        <div class="conj-row"><span class="conj-base">음악 (받침 있음)</span><span class="conj-result">음악이거든요</span></div>
+        <div class="conj-highlight">받침 없는 명사 → 거든요 &nbsp;|&nbsp; 받침 있는 명사 → 이거든요</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-chip"><div class="dot" style="background:#fbbf24"></div>반말 (Informal): ~거든요 → ~거든 &nbsp;(친구, 가족)</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-③ Examples -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-③</span>
+    <div>
+      <div class="sec-title">예문 · Example Sentences</div>
+      <div class="sec-sub">어떻게 쓰는지 예문으로 확인하세요.</div>
+    </div>
+  </div>
+
+  <div class="ex-block">
+    <div class="ex-row">
+      <div class="ex-num">1</div>
+      <div class="ex-content">
+        <div class="ex-kor">오늘은 집에 일찍 가야 해요. 제가 좋아하는 가수가 방송에 나오<span class="gram">거든요</span>.</div>
+        <div class="ex-eng">I need to go home early today. My favorite singer is going to be on TV, you see.</div>
+      </div>
+    </div>
+  </div>
+  <div class="ex-block">
+    <div class="ex-row">
+      <div class="ex-num">2</div>
+      <div class="ex-content">
+        <div class="ex-kor">시내에 가려면 지하철을 타세요. 길이 막히<span class="gram">거든요</span>.</div>
+        <div class="ex-eng">Take the subway if you're going downtown. Because the roads are jammed.</div>
+      </div>
+    </div>
+  </div>
+  <div class="ex-block">
+    <div class="ex-row">
+      <div class="ex-num">3</div>
+      <div class="ex-dialog">
+        <div class="dia-a"><span class="dia-label">A:</span>너는 왜 가수가 되려고 해?</div>
+        <div class="dia-b"><span class="dia-label">B:</span>노래 부르는 것을 정말 좋아하<span class="gram">거든</span>.</div>
+        <div class="ex-eng" style="margin-top:6px;">A: Why do you want to become a singer?&nbsp; B: Because I really love singing, you know.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-④ Conjugation Drill -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-④</span>
+    <div>
+      <div class="sec-title">활용 연습 · Conjugation Drill</div>
+      <div class="sec-sub">주어진 단어에 알맞은 ~거든요 형태를 써 보세요.</div>
+    </div>
+  </div>
+
+  <table class="drill-table">
+    <thead><tr><th>#</th><th>기본형</th><th>종류</th><th>~거든요 형태</th><th>나의 예문</th></tr></thead>
+    <tbody id="drillBody"></tbody>
+  </table>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkDrill()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="drillScore">-</span></div>
+    <span class="feedback" id="drillFeedback"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-⑤ Match -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑤</span>
+    <div>
+      <div class="sec-title">짝 찾기 · Match the Sentences</div>
+      <div class="sec-sub">A(상황)와 B(~거든요 이유)를 클릭해서 연결하세요.</div>
+    </div>
+  </div>
+
+  <div class="match-wrap">
+    <div>
+      <div class="match-col-label">A — 상황 / Situation</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div>
+      <div class="match-col-label">B — ~거든요 이유 / Reason</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+  <div class="check-bar">
+    <div class="score-chip">점수: <span class="s" id="matchScore">-</span></div>
+    <span class="feedback" id="matchFeedback"></span>
+    <button class="btn-secondary" onclick="resetMatch()">↩ 다시</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-⑥ Dialog -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑥</span>
+    <div>
+      <div class="sec-title">대화 완성하기 · Complete the Dialogue  <span style="font-size:13px;font-weight:400;color:var(--muted)">(교재 p.14)</span></div>
+      <div class="sec-sub">~거든요를 사용해서 B의 대답을 완성하세요.</div>
+    </div>
+  </div>
+  <div id="dialogArea"></div>
+
+  <div class="divider"></div>
+
+  <!-- A-⑦ Free write -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑦</span>
+    <div>
+      <div class="sec-title">자유 쓰기 · Free Writing ✏️</div>
+      <div class="sec-sub">~거든요를 사용해서 나만의 문장을 3개 써 보세요.</div>
+    </div>
+  </div>
+  <div class="free-block"><div class="free-num">① 문장 1</div><input class="free-input" placeholder="예: 저는 한국 음악을 좋아하거든요."></div>
+  <div class="free-block"><div class="free-num">② 문장 2</div><input class="free-input" placeholder="예: 오늘 바쁘거든요."></div>
+  <div class="free-block"><div class="free-num">③ 문장 3</div><input class="free-input" placeholder="여기에 문장을 써 보세요..."></div>
+
+</div><!-- /panelA -->
+
+<!-- ════════ PANEL B ════════ -->
+<div class="panel" id="panelB">
+
+  <!-- B-① 설명 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-①</span>
+    <div>
+      <div class="sec-title">설명 · Explanation</div>
+      <div class="sec-sub">먼저 설명을 읽고 이해해 보세요.</div>
+    </div>
+  </div>
+
+  <div class="explain-box green">
+    <div class="explain-head"><span class="icon">🇺🇸</span><span class="label">English</span></div>
+    <div class="explain-body">
+      <strong>-치고</strong> is attached to a <span class="hl-gn">noun</span>. It is used when the noun goes <span class="hl-gn">against what is generally expected or assumed</span>.<br>
+      In English it's like saying: <em>"For a [noun], there is no one who doesn't…"</em> or <em>"Any [noun] would…"</em><br><br>
+      The sentence after -치고 usually ends in a negative form like <span class="hl-gn">없다, 아니다, 못하다</span>.
+    </div>
+  </div>
+
+  <div class="explain-box orange">
+    <div class="explain-head"><span class="icon">🇰🇷</span><span class="label">한국어</span></div>
+    <div class="explain-body">
+      <strong>-치고</strong>는 명사 뒤에 붙어요. 앞에 오는 명사가 <span class="hl-or">일반적으로 예상되는 것과 반대되거나 예외가 없음</span>을 나타낼 때 사용해요.<br><br>
+      📌 구조: <strong>명사 + 치고 + [기대에 반하는 내용] + 없다 / 아니다 / 못하다…</strong>
+    </div>
+  </div>
+
+  <!-- correct vs wrong -->
+  <div class="compare-wrap">
+    <div class="compare-card ok">
+      <div class="compare-head">✅ 올바른 사용 (Correct)</div>
+      <div class="compare-body">
+        <strong>학생치고</strong> 방학 싫어하는 사람은 없어요.<br>
+        <div class="note">→ "학생" (noun) comes before -치고</div>
+      </div>
+    </div>
+    <div class="compare-card ng">
+      <div class="compare-head">❌ 잘못된 사용 (Wrong)</div>
+      <div class="compare-body">
+        <strong>치고</strong> 그 학생은 방학을 싫어해요.<br>
+        <div class="note">→ -치고 needs a noun BEFORE it!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- B-② Examples -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-②</span>
+    <div>
+      <div class="sec-title">예문 · Example Sentences</div>
+      <div class="sec-sub">어떻게 쓰는지 예문으로 확인하세요.</div>
+    </div>
+  </div>
+  <div id="chiExamples"></div>
+
+  <div class="divider"></div>
+
+  <!-- B-③ O/X -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-③</span>
+    <div>
+      <div class="sec-title">맞으면 O, 틀리면 X · Correct or Incorrect?</div>
+      <div class="sec-sub">-치고가 올바르게 쓰인 문장은 O, 틀린 것은 X를 누르세요. 틀린 문장은 어떻게 고쳐야 할까요?</div>
+    </div>
+  </div>
+  <div class="ox-list" id="oxList"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkOX()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="oxScore">-</span></div>
+    <span class="feedback" id="oxFeedback"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- B-④ Build a sentence -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-④</span>
+    <div>
+      <div class="sec-title">문장 만들기 · Build a Sentence  <span style="font-size:13px;font-weight:400;color:var(--muted)">(교재 p.15)</span></div>
+      <div class="sec-sub">대상과 생각을 합쳐서 -치고 문장을 만들어 보세요.</div>
+    </div>
+  </div>
+  <table class="build-table">
+    <thead><tr><th>대상 (Topic)</th><th>생각 (Idea)</th><th>나의 문장 (My sentence)</th></tr></thead>
+    <tbody id="buildBody"></tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <!-- B-⑤ Word bank fill -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑤</span>
+    <div>
+      <div class="sec-title">단어 골라 넣기 · Word Bank Fill-in</div>
+      <div class="sec-sub">보기에서 알맞은 명사를 클릭해서 빈칸에 넣으세요.</div>
+    </div>
+  </div>
+  <div class="word-bank">
+    <div class="wb-label">📦 보기 Word Bank</div>
+    <div class="wb-chips" id="wbChips"></div>
+  </div>
+  <div id="fillRows"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkFill()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="fillScore">-</span></div>
+    <button class="btn-secondary" onclick="resetFill()">↩ 다시</button>
+    <span class="feedback" id="fillFeedback"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- B-⑥ Free write -->
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑥</span>
+    <div>
+      <div class="sec-title">자유 쓰기 · Free Writing ✏️</div>
+      <div class="sec-sub">-치고를 사용해서 나만의 문장을 3개 써 보세요.</div>
+    </div>
+  </div>
+  <div class="free-block"><div class="free-num">① 문장 1</div><input class="free-input" placeholder="예: 요즘 가수치고 팬클럽 없는 사람은 없어요."></div>
+  <div class="free-block"><div class="free-num">② 문장 2</div><input class="free-input" placeholder="여기에 문장을 써 보세요..."></div>
+  <div class="free-block"><div class="free-num">③ 문장 3</div><input class="free-input" placeholder="여기에 문장을 써 보세요..."></div>
+
+</div><!-- /panelB -->
+
+<!-- ════════ PANEL C ════════ -->
+<div class="panel" id="panelC">
+
+  <!-- C-① Choose -->
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-①</span>
+    <div>
+      <div class="sec-title">알맞은 문법 고르기 · Choose the Correct Grammar</div>
+      <div class="sec-sub">~거든요 와 -치고 중에서 알맞은 것을 클릭하세요.</div>
+    </div>
+  </div>
+  <div id="chooseArea"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkChoose()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="chooseScore">-</span></div>
+    <span class="feedback" id="chooseFeedback"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- C-② Fill blanks -->
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-②</span>
+    <div>
+      <div class="sec-title">빈칸 채우기 · Fill in the Blanks</div>
+      <div class="sec-sub">~거든요 또는 -치고를 사용해서 빈칸을 완성하세요.</div>
+    </div>
+  </div>
+  <div id="cFillArea"></div>
+
+  <div class="divider"></div>
+
+  <!-- C-③ Write a dialogue -->
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-③</span>
+    <div>
+      <div class="sec-title">소개 대화 쓰기 · Write a Dialogue ✏️</div>
+      <div class="sec-sub">좋아하는 가수, 운동선수, 또는 유튜버를 소개하는 대화를 써 보세요. ~거든요 와 -치고를 각각 한 번씩 사용하세요.</div>
+    </div>
+  </div>
+  <div id="chatArea"></div>
+  <div class="check-bar" style="gap:16px;">
+    <div style="font-size:13px;">
+      ✅ ~거든요: <span id="hasGdeun" style="font-weight:700;color:var(--muted)">미완성</span>
+      &nbsp;&nbsp;
+      ✅ -치고: <span id="hasChi" style="font-weight:700;color:var(--muted)">미완성</span>
+    </div>
+    <button class="btn-check" onclick="checkChat()">확인하기</button>
+  </div>
+
+</div><!-- /panelC -->
+
+<script>
+// ══════════════ DATA ══════════════
+const DRILLS = [
+  {n:1, base:'좋아하다', type:'동사',           ans:'좋아하거든요',    given:true,  ex:'저는 K-pop을 좋아하거든요.'},
+  {n:2, base:'귀엽다',   type:'형용사',          ans:'귀엽거든요',      given:false},
+  {n:3, base:'먹다',     type:'동사',            ans:'먹거든요',        given:false},
+  {n:4, base:'바쁘다',   type:'형용사',          ans:'바쁘거든요',      given:false},
+  {n:5, base:'재미있다', type:'형용사',          ans:'재미있거든요',    given:false},
+  {n:6, base:'없다',     type:'있다/없다',       ans:'없거든요',        given:false},
+  {n:7, base:'연예인',   type:'명사 (받침X+이)', ans:'연예인이거든요',  given:true,  ex:'그 사람은 연예인이거든요.'},
+  {n:8, base:'방송',     type:'명사 (받침O+이)', ans:'방송이거든요',    given:false},
+  {n:9, base:'가수',     type:'명사 (받침X)',    ans:'가수거든요',      given:false},
+  {n:10,base:'음악',     type:'명사 (받침O+이)', ans:'음악이거든요',    given:false},
+];
+
+const MATCH_L = [
+  {id:'l1', text:'오늘 왜 이렇게 일찍 왔어요?'},
+  {id:'l2', text:'왜 저 노래가 좋아요?'},
+  {id:'l3', text:'왜 컴퓨터를 쓰고 싶어요?'},
+  {id:'l4', text:'왜 오늘 밤에 못 나와요?'},
+];
+const MATCH_R = [
+  {id:'r1', text:'콘서트 표를 예매해야 하거든요.', pair:'l1'},
+  {id:'r2', text:'멜로디가 정말 아름답거든요.',    pair:'l2'},
+  {id:'r3', text:'시험이 있거든요.',               pair:'l3'},
+  {id:'r4', text:'부모님이 오시거든요.',            pair:'l4'},
+];
+
+const DIALOGS = [
+  {q:'A: 너 정말 춤 잘 춘다. 댄스 가수 같아.',          id:'d1', hint:'요즘 연습을 많이 하_____거든.'},
+  {q:'A: 이번 주말에 같이 콘서트 보러 갈래요?',          id:'d2', hint:'우리 집에 손님이 오_____거든요.'},
+  {q:'A: 오후에 축구하러 갈래?',                         id:'d3', hint:'오후에 다른 약속이 있_____거든.'},
+  {q:'A: 저는 사람들 앞에서 이야기를 잘 못하겠어요.',    id:'d4', hint:'처음부터 잘하는 사람은 없_____거든요.'},
+];
+
+const CHI_EXAMPLES = [
+  {kor:'학생치고 방학 싫어하는 사람은 없을걸요.',                         eng:'There\'s probably no student who dislikes vacation.'},
+  {kor:'인기 있는 가수치고 연기 안 하는 사람은 없는 것 같아요.',           eng:'It seems like there\'s no popular singer who doesn\'t also act.'},
+  {kor:'A: 유진이하고 알렉스는 야구하러 갔어?  B: 응, 우리 반 남학생치고 야구 싫어하는 사람 없잖아.', eng:'A: Did Eugene and Alex go play baseball? B: Yeah, no boy in our class dislikes baseball.'},
+  {kor:'요즘 가수치고 춤을 못 추는 사람은 없을 거예요.',                   eng:'These days, there\'s probably no singer who can\'t dance.'},
+  {kor:'부모님치고 아이 걱정 안 하는 분은 없어요.',                        eng:'There\'s no parent who doesn\'t worry about their child.'},
+];
+
+const OX_DATA = [
+  {id:'ox1', text:'요즘 가수치고 춤을 못 추는 사람은 없어요.',          ans:'O', correction:null},
+  {id:'ox2', text:'치고 그 학생은 정말 성실해요.',                       ans:'X', correction:'→ 학생치고 성실하지 않은 사람은 없어요. (-치고 앞에 명사가 필요해요!)'},
+  {id:'ox3', text:'학생치고 방학을 싫어하는 사람은 없어요.',             ans:'O', correction:null},
+  {id:'ox4', text:'패스트푸드치고 건강한 게 없어요.',                    ans:'X', correction:'→ 패스트푸드치고 건강한 게 없는 것 같아요. (뒤 내용이 자연스럽지 않아요.)'},
+  {id:'ox5', text:'강아지치고 귀엽지 않은 게 없어요.',                   ans:'O', correction:null},
+  {id:'ox6', text:'치고 인기가 많은 가수예요.',                          ans:'X', correction:'→ 인기 있는 가수치고 팬클럽 없는 사람은 없어요.'},
+];
+
+const BUILD_DATA = [
+  {topic:'요즘 가수',   idea:'춤을 못 추는 사람은 없다',    sample:'요즘 가수치고 춤을 못 추는 사람은 없을 거예요.', isSample:true},
+  {topic:'요즘 아이',   idea:'만화 영화 싫어하는 아이는 없다', isSample:false},
+  {topic:'부모님',      idea:'아이 걱정 안 하는 사람은 없다',  isSample:false},
+  {topic:'강아지',      idea:'귀엽지 않은 게 없다',           isSample:false},
+  {topic:'노력하는 사람',idea:'성공 못 하는 사람은 없다',     isSample:false},
+  {topic:'내가 고른 주제: ___', idea:'', isSample:false},
+];
+
+const WB_WORDS = ['노력하는 사람','요즘 아이','패스트푸드','전통놀이','인기 있는 가수'];
+const FILL_DATA = [
+  {id:'fb1', suffix:'치고 성공 못 하는 사람은 없어요.',          ans:'노력하는 사람'},
+  {id:'fb2', suffix:'치고 건강한 게 없는 것 같아요.',            ans:'패스트푸드'},
+  {id:'fb3', suffix:'치고 모르는 아이는 없어요.',                ans:'전통놀이'},
+  {id:'fb4', suffix:'치고 연기 안 하는 사람은 없는 것 같아요.', ans:'인기 있는 가수'},
+  {id:'fb5', suffix:'치고 스마트폰 없는 아이는 없어요.',         ans:'요즘 아이'},
+];
+
+const CHOOSE_DATA = [
+  {id:'c1', pre:'저 사람은 유명한 가수예요. 정말 매력이 있', opts:['거든요','치고'], ans:'거든요'},
+  {id:'c2', pre:'요즘 아이', opts:['거든요','치고'], ans:'치고', post:' 스마트폰 없는 사람은 없어요.'},
+  {id:'c3', pre:'오늘 일찍 집에 가야 해요. 숙제가 많', opts:['거든요','치고'], ans:'거든요'},
+  {id:'c4', pre:'인기 있는 유튜버', opts:['거든요','치고'], ans:'치고', post:' 팔로워 없는 사람은 없어요.'},
+  {id:'c5', pre:'A: 왜 한국어 공부해요?  B: 드라마를 자막 없이 보고 싶', opts:['거든요','치고'], ans:'거든요'},
+];
+
+const CFILL_DATA = [
+  {id:'cf1', pre:'요즘 K-pop 가수', blank:true, post:'치고', suf:' 춤을 못 추는 사람은 없을 거예요.', ph:'명사를 써 보세요'},
+  {id:'cf2', pre:'A: 왜 밥을 안 먹어요?  B: 배가 안 고프', blank:true, post:'', suf:'.', ph:'~거든요 or ~거든'},
+  {id:'cf3', pre:'노력하는 사람', blank:true, post:'치고', suf:' 성공하지 못하는 사람은 없어요.', ph:''},
+  {id:'cf4', pre:'A: 왜 오늘 피곤해 보여요?  B: 어젯밤에 잠을 못 잤', blank:true, post:'', suf:'.', ph:'~거든요 or ~거든'},
+];
+
+// ══════════════ STATE ══════════════
+let matchSelL = null, matchSelR = null, matchDone = {};
+let activeBlank = null, fillFilled = {}, oxSel = {}, chooseSel = {};
+
+// ══════════════ BUILD UI ══════════════
+function buildDrill() {
+  document.getElementById('drillBody').innerHTML = DRILLS.map(r => `
+    <tr class="${r.given?'given-row':''}">
+      <td class="num-cell">${r.n}</td>
+      <td><span class="base-word">${r.base}</span></td>
+      <td><span class="type-label">${r.type}</span></td>
+      <td>${r.given
+        ? `<span class="shown-ans">${r.ans}</span>`
+        : `<input class="ans-input" id="di${r.n}" placeholder="____________">`
+      }</td>
+      <td>${r.ex
+        ? `<span class="given-label">${r.ex}</span>`
+        : `<input class="ex-field" id="dex${r.n}" placeholder="예문을 써 보세요...">`
+      }</td>
+    </tr>`).join('');
+}
+
+function buildMatch() {
+  document.getElementById('matchLeft').innerHTML = MATCH_L.map((m,i)=>`
+    <div class="match-item" id="${m.id}" onclick="selL('${m.id}')">
+      <span class="match-badge">${i+1}</span>${m.text}
+    </div>`).join('');
+  const sh = [...MATCH_R].sort(()=>Math.random()-.5);
+  document.getElementById('matchRight').innerHTML = sh.map((m,i)=>`
+    <div class="match-item" id="${m.id}" onclick="selR('${m.id}')">
+      <span class="match-badge">${['ㄱ','ㄴ','ㄷ','ㄹ'][i]}</span>${m.text}
+    </div>`).join('');
+}
+
+function buildDialogs() {
+  document.getElementById('dialogArea').innerHTML = DIALOGS.map(d=>`
+    <div class="dialog-block">
+      <div class="dialog-row"><div class="d-label a">A</div><div class="d-body">${d.q}</div></div>
+      <div class="dialog-row"><div class="d-label b">B</div>
+        <div class="d-body">B: <input class="d-input" id="${d.id}" placeholder="${d.hint}">
+        <span class="d-suffix">&nbsp;~거든(요)</span></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildChiEx() {
+  document.getElementById('chiExamples').innerHTML = CHI_EXAMPLES.map((e,i)=>`
+    <div class="ex-block">
+      <div class="ex-row">
+        <div class="ex-num">${i+1}</div>
+        <div class="ex-content">
+          <div class="ex-kor">${e.kor.replace(/치고/g,'<span class="gram">치고</span>')}</div>
+          <div class="ex-eng">→ ${e.eng}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function buildOX() {
+  document.getElementById('oxList').innerHTML = OX_DATA.map((item,i)=>`
+    <div class="ox-item" id="oxrow_${item.id}">
+      <div class="ox-num">${i+1}</div>
+      <div class="ox-wrap">
+        <div class="ox-text">${item.text}</div>
+        <div class="ox-btns">
+          <button class="ox-btn" id="btnO_${item.id}" onclick="pickOX('${item.id}','O')">O</button>
+          <button class="ox-btn" id="btnX_${item.id}" onclick="pickOX('${item.id}','X')">X</button>
+        </div>
+        ${item.correction ? `<div class="ox-correction" id="corr_${item.id}"><div class="label">수정 (Correction)</div>${item.correction}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function buildBuild() {
+  document.getElementById('buildBody').innerHTML = BUILD_DATA.map(r=>`
+    <tr class="${r.isSample?'sample-row':''}">
+      <td class="topic-cell">${r.topic}</td>
+      <td class="idea-cell">${r.idea}</td>
+      <td>${r.isSample
+        ? `<span style="color:#6ee7b7;font-size:13px;font-style:italic;">${r.sample} ✅</span>`
+        : `<input class="build-input" placeholder="${r.topic}치고 ...">`
+      }</td>
+    </tr>`).join('');
+}
+
+function buildWordBank() {
+  document.getElementById('wbChips').innerHTML = WB_WORDS.map(w=>`
+    <span class="wb-chip" id="chip_${w.replace(/ /g,'_')}" onclick="selectChip('${w}')">${w}</span>`).join('');
+  document.getElementById('fillRows').innerHTML = FILL_DATA.map((f,i)=>`
+    <div class="fill-row">
+      <span class="fill-n">${i+1}.</span>
+      <span class="fill-blank" id="blank_${f.id}" onclick="clickBlank('${f.id}')">클릭</span>
+      <span class="fill-text">${f.suffix}</span>
+    </div>`).join('');
+}
+
+function buildChoose() {
+  document.getElementById('chooseArea').innerHTML = CHOOSE_DATA.map(c=>`
+    <div class="choose-row">
+      <span class="choose-n">${CHOOSE_DATA.indexOf(c)+1}.</span>
+      <span class="choose-text">${c.pre} ( 
+        ${c.opts.map(o=>`<button class="choose-btn" id="cb_${c.id}_${o}" onclick="pickChoose('${c.id}','${o}')">${o}</button>`).join(' / ')}
+      ) ${c.post||''}</span>
+    </div>`).join('');
+}
+
+function buildCFill() {
+  document.getElementById('cFillArea').innerHTML = CFILL_DATA.map((f,i)=>`
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;">
+      <span style="font-size:12px;font-weight:800;color:#c4b5fd;">${i+1}.</span>
+      <span style="font-size:15px;line-height:2.2;margin-left:8px;">
+        ${f.pre}<input class="cblank-input" id="${f.id}" placeholder="${f.ph||'___________'}">${f.post}${f.suf}
+      </span>
+    </div>`).join('');
+}
+
+function buildChat() {
+  const turns = ['A','B','A','B','A'];
+  document.getElementById('chatArea').innerHTML = turns.map((l,i)=>`
+    <div class="chat-block">
+      <div class="chat-row">
+        <div class="chat-lbl ${l.toLowerCase()}">${l}</div>
+        <div class="chat-body"><input class="chat-inp" id="chat${i}" placeholder="${l==='A'?'말을 써 보세요...':'대답을 써 보세요...'}"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════ MATCH LOGIC ══════════════
+function selL(id) {
+  if(matchDone[id]) return;
+  if(matchSelL===id){matchSelL=null;document.getElementById(id).classList.remove('selected');return;}
+  if(matchSelL) document.getElementById(matchSelL)?.classList.remove('selected');
+  matchSelL=id; document.getElementById(id).classList.add('selected'); tryMatch();
+}
+function selR(id) {
+  if(Object.values(matchDone).includes(id)) return;
+  if(matchSelR===id){matchSelR=null;document.getElementById(id).classList.remove('selected');return;}
+  if(matchSelR) document.getElementById(matchSelR)?.classList.remove('selected');
+  matchSelR=id; document.getElementById(id).classList.add('selected'); tryMatch();
+}
+function tryMatch() {
+  if(!matchSelL||!matchSelR) return;
+  const rd = MATCH_R.find(r=>r.id===matchSelR);
+  const lEl = document.getElementById(matchSelL);
+  const rEl = document.getElementById(matchSelR);
+  if(rd.pair===matchSelL){
+    lEl.classList.replace('selected','matched-ok'); rEl.classList.replace('selected','matched-ok');
+    matchDone[matchSelL]=matchSelR;
+    const d=Object.keys(matchDone).length;
+    document.getElementById('matchScore').textContent=`${d} / ${MATCH_L.length}`;
+    if(d===MATCH_L.length) document.getElementById('matchFeedback').textContent='🎉 완벽해요!';
+    updateTotal();
+  } else {
+    lEl.classList.add('matched-err'); rEl.classList.add('matched-err');
+    setTimeout(()=>{lEl.classList.remove('matched-err','selected');rEl.classList.remove('matched-err','selected');},500);
+  }
+  matchSelL=null; matchSelR=null;
+}
+function resetMatch(){
+  matchDone={};matchSelL=null;matchSelR=null;
+  document.getElementById('matchScore').textContent='-';
+  document.getElementById('matchFeedback').textContent='';
+  buildMatch();
+}
+
+// ══════════════ OX ══════════════
+function pickOX(id,val){
+  oxSel[id]=val;
+  document.getElementById(`btnO_${id}`).className='ox-btn'+(val==='O'?' sel-o':'');
+  document.getElementById(`btnX_${id}`).className='ox-btn'+(val==='X'?' sel-x':'');
+}
+
+// ══════════════ WORD BANK ══════════════
+function clickBlank(fid){
+  activeBlank=fid;
+  document.querySelectorAll('.fill-blank').forEach(b=>b.classList.remove('active-blank'));
+  document.getElementById('blank_'+fid).classList.add('active-blank');
+}
+function selectChip(word){
+  if(!activeBlank){alert('먼저 빈칸을 클릭하세요!');return;}
+  const prev=Object.entries(fillFilled).find(([k,v])=>v===word);
+  if(prev){fillFilled[prev[0]]='';renderBlank(prev[0],'');document.getElementById('chip_'+word.replace(/ /g,'_'))?.classList.remove('used');}
+  fillFilled[activeBlank]=word;
+  renderBlank(activeBlank,word);
+  document.getElementById('chip_'+word.replace(/ /g,'_')).classList.add('used');
+  document.querySelectorAll('.fill-blank').forEach(b=>b.classList.remove('active-blank'));
+  activeBlank=null;
+}
+function renderBlank(fid,word){
+  const el=document.getElementById('blank_'+fid);
+  el.textContent=word||'클릭';
+  el.className='fill-blank'+(word?' filled':'');
+}
+function resetFill(){
+  fillFilled={};activeBlank=null;
+  FILL_DATA.forEach(f=>renderBlank(f.id,''));
+  WB_WORDS.forEach(w=>{const c=document.getElementById('chip_'+w.replace(/ /g,'_'));if(c)c.classList.remove('used');});
+  document.getElementById('fillScore').textContent='-';
+  document.getElementById('fillFeedback').textContent='';
+}
+
+// ══════════════ CHOOSE ══════════════
+function pickChoose(id,val){
+  chooseSel[id]=val;
+  const c=CHOOSE_DATA.find(x=>x.id===id);
+  c.opts.forEach(o=>document.getElementById(`cb_${id}_${o}`).className='choose-btn'+(val===o?' sel':''));
+}
+
+// ══════════════ CHECK FUNCTIONS ══════════════
+function checkDrill(){
+  let s=0,t=0;
+  DRILLS.filter(r=>!r.given).forEach(r=>{
+    t++; const inp=document.getElementById('di'+r.n); if(!inp) return;
+    const ok=inp.value.trim()===r.ans;
+    inp.classList.toggle('correct',ok); inp.classList.toggle('wrong',!ok);
+    if(ok) s++;
+  });
+  document.getElementById('drillScore').textContent=`${s} / ${t}`;
+  document.getElementById('drillFeedback').textContent=s===t?'🎉 완벽해요!':s>=t/2?'👍 잘하고 있어요!':'💪 다시 해봐요!';
+  updateTotal();
+}
+
+function checkOX(){
+  let s=0;
+  OX_DATA.forEach(item=>{
+    const sel=oxSel[item.id]; if(!sel) return;
+    const ok=sel===item.ans;
+    document.getElementById(`btnO_${item.id}`).className='ox-btn'+(item.ans==='O'?' is-correct':sel==='O'?' is-wrong':'');
+    document.getElementById(`btnX_${item.id}`).className='ox-btn'+(item.ans==='X'?' is-correct':sel==='X'?' is-wrong':'');
+    if(ok) s++;
+    else if(item.correction){const c=document.getElementById(`corr_${item.id}`);if(c)c.style.display='block';}
+  });
+  document.getElementById('oxScore').textContent=`${s} / ${OX_DATA.length}`;
+  document.getElementById('oxFeedback').textContent=s===OX_DATA.length?'🎉 완벽해요!':'틀린 것을 다시 확인해봐요!';
+  updateTotal();
+}
+
+function checkFill(){
+  let s=0;
+  FILL_DATA.forEach(f=>{
+    const filled=fillFilled[f.id]||'';
+    const ok=filled===f.ans;
+    const el=document.getElementById('blank_'+f.id);
+    el.className='fill-blank '+(ok?'filled':'wrong-fill');
+    if(ok) s++;
+  });
+  document.getElementById('fillScore').textContent=`${s} / ${FILL_DATA.length}`;
+  document.getElementById('fillFeedback').textContent=s===FILL_DATA.length?'🎉 완벽해요!':'다시 확인해봐요!';
+  updateTotal();
+}
+
+function checkChoose(){
+  let s=0;
+  CHOOSE_DATA.forEach(c=>{
+    const sel=chooseSel[c.id]; if(!sel) return;
+    const ok=sel===c.ans;
+    c.opts.forEach(o=>{
+      const btn=document.getElementById(`cb_${c.id}_${o}`);
+      if(o===c.ans) btn.className='choose-btn correct-pick';
+      else if(o===sel&&!ok) btn.className='choose-btn wrong-pick';
+      else btn.className='choose-btn';
+    });
+    if(ok) s++;
+  });
+  document.getElementById('chooseScore').textContent=`${s} / ${CHOOSE_DATA.length}`;
+  document.getElementById('chooseFeedback').textContent=s===CHOOSE_DATA.length?'🎉 완벽해요!':'틀린 것을 확인해봐요!';
+  updateTotal();
+}
+
+function checkChat(){
+  const all=[0,1,2,3,4].map(i=>document.getElementById('chat'+i)?.value||'').join(' ');
+  const hg=all.includes('거든');
+  const hc=all.includes('치고');
+  const gEl=document.getElementById('hasGdeun');
+  const cEl=document.getElementById('hasChi');
+  gEl.textContent=hg?'✅ 사용했어요!':'⬜ 아직...';
+  gEl.style.color=hg?'#6ee7b7':'#fca5a5';
+  cEl.textContent=hc?'✅ 사용했어요!':'⬜ 아직...';
+  cEl.style.color=hc?'#6ee7b7':'#fca5a5';
+}
+
+function updateTotal(){
+  let s=0,p=0;
+  const ds=document.getElementById('drillScore').textContent;
+  const os=document.getElementById('oxScore').textContent;
+  const fs=document.getElementById('fillScore').textContent;
+  const cs=document.getElementById('chooseScore').textContent;
+  [ds,os,fs,cs].forEach(x=>{const m=x.match(/(\d+)\s*\/\s*(\d+)/);if(m){s+=+m[1];p+=+m[2];}});
+  s+=Object.keys(matchDone).length; p+=MATCH_L.length;
+  document.getElementById('totalScore').textContent=s;
+  document.getElementById('totalPoss').textContent=p;
+}
+
+// ══════════════ TABS ══════════════
+function switchTab(t){
+  ['a','b','c'].forEach(id=>{
+    document.getElementById('panel'+id.toUpperCase()).classList.toggle('active',id===t);
+  });
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['a','b','c'][i]===t));
+}
+
+// ══════════════ RESET ══════════════
+function resetAll(){
+  if(!confirm('정말 초기화할까요? 모든 답이 지워져요.')) return;
+  location.reload();
+}
+
+// ══════════════ INIT ══════════════
+buildDrill(); buildMatch(); buildDialogs();
+buildChiEx(); buildOX(); buildBuild(); buildWordBank();
+buildChoose(); buildCFill(); buildChat();
+</script>
+</body>
+</html>
