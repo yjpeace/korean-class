@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 01 어휘 카드 | 내가 좋아하는 가수</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #1B4F8A;
+    --blue-mid:   #2563B0;
+    --blue-light: #D6E8F7;
+    --orange:     #E07B30;
+    --orange-light: #FDE9D9;
+    --dark:       #1A1A2E;
+    --white:      #FFFFFF;
+    --gray:       #6B7280;
+    --card-h:     420px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #0f2044 0%, #1B4F8A 50%, #0f3060 100%);
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 36px;
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-badge {
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .logo-title {
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .logo-sub { font-size: 12px; opacity: 0.6; margin-top: 1px; }
+
+  .progress-wrap {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .progress-text { font-size: 14px; font-weight: 600; opacity: 0.85; }
+  .progress-bar {
+    width: 160px; height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 99px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), #f9a95a);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── MAIN AREA ── */
+  main {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 20px;
+  }
+
+  /* ── MODE TABS ── */
+  .mode-tabs {
+    display: flex; gap: 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px; padding: 5px;
+  }
+  .tab-btn {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: none; cursor: pointer;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+    background: transparent; color: rgba(255,255,255,0.55);
+  }
+  .tab-btn.active {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 2px 10px rgba(224,123,48,0.4);
+  }
+
+  /* ── CARD ── */
+  .card-scene {
+    width: min(680px, 94vw);
+    height: var(--card-h);
+    perspective: 1200px;
+    cursor: pointer;
+  }
+  .card-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-scene.flipped .card-inner { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+  }
+
+  /* FRONT */
+  .card-front {
+    background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 100%);
+    color: var(--dark);
+  }
+  .card-front .card-tag {
+    position: absolute; top: 22px; left: 28px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 99px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .card-front .flip-hint {
+    position: absolute; bottom: 20px; right: 24px;
+    font-size: 11px; color: var(--gray); opacity: 0.7;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .flip-hint svg { width: 14px; height: 14px; }
+
+  .card-num {
+    position: absolute; top: 22px; right: 28px;
+    font-size: 13px; font-weight: 700;
+    color: var(--gray); opacity: 0.6;
+  }
+
+  .korean-word {
+    font-size: clamp(36px, 7vw, 60px);
+    font-weight: 900;
+    color: var(--blue);
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .korean-example {
+    font-size: clamp(14px, 2.5vw, 18px);
+    color: #374151;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 520px;
+    opacity: 0.7;
+    margin-top: 8px;
+  }
+
+  /* BACK */
+  .card-back {
+    background: linear-gradient(145deg, #1B4F8A 0%, #0f3060 100%);
+    color: white;
+    transform: rotateY(180deg);
+  }
+  .card-back .card-tag {
+    position: absolute; top: 22px; left: 28px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 99px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .english-word {
+    font-size: clamp(18px, 3.5vw, 28px);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    color: #f0f9ff;
+    max-width: 520px;
+    margin-bottom: 20px;
+  }
+  .divider {
+    width: 60px; height: 3px;
+    background: var(--orange);
+    border-radius: 99px;
+    margin: 0 auto 20px;
+  }
+  .english-example {
+    font-size: clamp(13px, 2vw, 16px);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    line-height: 1.6;
+    max-width: 520px;
+    font-style: italic;
+  }
+  .orange-badge {
+    background: rgba(224,123,48,0.2);
+    border: 1px solid rgba(224,123,48,0.4);
+    color: #f9a95a;
+    font-size: 12px; font-weight: 600;
+    padding: 4px 14px; border-radius: 99px;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 26px;
+    border-radius: 14px;
+    border: none; cursor: pointer;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .btn-nav {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .btn-nav:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+  .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .btn-flip {
+    background: var(--orange);
+    color: white;
+    padding: 14px 34px;
+    font-size: 15px;
+    box-shadow: 0 4px 18px rgba(224,123,48,0.4);
+  }
+  .btn-flip:hover { background: #c86e28; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(224,123,48,0.5); }
+
+  /* ── QUIZ MODE ── */
+  .quiz-wrap {
+    width: min(760px, 94vw);
+  }
+  .quiz-question {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 36px 40px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .quiz-label { font-size: 13px; opacity: 0.6; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .quiz-word { font-size: clamp(32px, 6vw, 52px); font-weight: 900; color: #93c5fd; }
+
+  .quiz-options {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .quiz-opt {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: left; cursor: pointer;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    color: white; transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .quiz-opt:hover:not(.disabled) { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
+  .quiz-opt.correct { background: rgba(16,185,129,0.25); border-color: #10b981; color: #6ee7b7; }
+  .quiz-opt.wrong   { background: rgba(239,68,68,0.2);  border-color: #ef4444; color: #fca5a5; }
+  .quiz-opt.disabled { cursor: default; }
+  .opt-letter { font-weight: 800; color: rgba(255,255,255,0.4); margin-right: 10px; font-size: 13px; }
+  .quiz-opt.correct .opt-letter { color: #10b981; }
+  .quiz-opt.wrong   .opt-letter { color: #ef4444; }
+
+  .quiz-feedback {
+    text-align: center; height: 36px; display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; gap: 8px;
+    margin-top: 6px;
+  }
+
+  /* ── VOCAB LIST MODE ── */
+  .vocab-list {
+    width: min(820px, 94vw);
+    max-height: calc(100vh - 170px);
+    overflow-y: auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .vocab-list::-webkit-scrollbar { width: 5px; }
+  .vocab-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 99px; }
+  .vocab-item {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .vocab-num {
+    background: var(--blue-mid);
+    color: white; font-weight: 800;
+    font-size: 12px; min-width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vocab-kr { font-size: 17px; font-weight: 700; color: #93c5fd; margin-bottom: 3px; }
+  .vocab-en { font-size: 12px; opacity: 0.65; line-height: 1.3; }
+
+  /* score badge */
+  .score-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 99px;
+    padding: 5px 14px;
+    font-size: 13px; font-weight: 600;
+  }
+  .score-badge span { color: #fbbf24; font-weight: 800; }
+
+  /* shuffle btn */
+  .btn-shuffle {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 13px; padding: 9px 18px;
+  }
+  .btn-shuffle:hover { background: rgba(255,255,255,0.18); }
+
+  /* hidden */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div>
+      <div class="logo-badge">NAKS 4-2</div>
+    </div>
+    <div>
+      <div class="logo-title">Unit 01 어휘 카드</div>
+      <div class="logo-sub">내가 좋아하는 가수</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div class="score-badge" id="scoreBadge" style="display:none;">점수: <span id="scoreNum">0</span> / <span id="scoreTot">0</span></div>
+    <div class="progress-wrap">
+      <span class="progress-text" id="progressText">1 / 16</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:6.25%"></div></div>
+    </div>
+  </div>
+</header>
+
+<main id="mainArea">
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <button class="tab-btn active" onclick="setMode('flash')">📚 플래시카드</button>
+    <button class="tab-btn" onclick="setMode('quiz')">🎯 퀴즈</button>
+    <button class="tab-btn" onclick="setMode('list')">📋 전체 목록</button>
+  </div>
+
+  <!-- ── FLASHCARD MODE ── -->
+  <div id="flashMode">
+    <div class="card-scene" id="cardScene" onclick="flipCard()">
+      <div class="card-inner" id="cardInner">
+        <!-- FRONT -->
+        <div class="card-face card-front">
+          <span class="card-tag">한국어 → 영어</span>
+          <span class="card-num" id="cardNum">1 / 16</span>
+          <div class="korean-word" id="frontWord"></div>
+          <div class="korean-example" id="frontEx"></div>
+          <div class="flip-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+            클릭해서 뒤집기
+          </div>
+        </div>
+        <!-- BACK -->
+        <div class="card-face card-back">
+          <span class="card-tag">영어 뜻</span>
+          <div class="english-word" id="backDef"></div>
+          <div class="divider"></div>
+          <div class="orange-badge">예문 Example</div>
+          <div class="english-example" id="backEx"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-nav" id="prevBtn" onclick="navigate(-1)">◀ 이전</button>
+      <button class="btn btn-flip" onclick="flipCard()">🔄 뒤집기</button>
+      <button class="btn btn-nav" id="nextBtn" onclick="navigate(1)">다음 ▶</button>
+      <button class="btn btn-shuffle btn-nav" onclick="shuffleCards()" title="순서 섞기">🔀</button>
+    </div>
+  </div>
+
+  <!-- ── QUIZ MODE ── -->
+  <div id="quizMode" class="hidden">
+    <div class="quiz-wrap">
+      <div class="quiz-question">
+        <div class="quiz-label">다음 단어의 뜻은? What does this mean?</div>
+        <div class="quiz-word" id="quizWord"></div>
+      </div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+    </div>
+    <div class="controls" style="margin-top:8px;">
+      <div class="score-badge">점수: <span id="quizScore">0</span> / <span id="quizTotal">0</span></div>
+      <button class="btn btn-flip" id="quizNextBtn" onclick="nextQuiz()" style="display:none;">다음 문제 ▶</button>
+      <button class="btn btn-nav btn-shuffle" onclick="restartQuiz()">🔄 다시 시작</button>
+    </div>
+  </div>
+
+  <!-- ── LIST MODE ── -->
+  <div id="listMode" class="hidden">
+    <div class="vocab-list" id="vocabList"></div>
+  </div>
+
+</main>
+
+<script>
+const VOCAB = [
+  { kr:"대중음악", en:"popular music", enFull:"popular music (music enjoyed by the general public)", krEx:"대중음악을 좋아해요.", enEx:"I like popular music." },
+  { kr:"연예인", en:"celebrity", enFull:"celebrity / entertainer", krEx:"그 사람은 유명한 연예인이에요.", enEx:"That person is a famous celebrity." },
+  { kr:"타고나다", en:"to be born with a talent", enFull:"to be born with (a talent); to be gifted naturally", krEx:"그는 노래 실력을 타고났어요.", enEx:"He was born with singing talent." },
+  { kr:"연기(하다)", en:"acting; to act", enFull:"acting; to act / perform", krEx:"그 가수는 연기도 잘해요.", enEx:"That singer is also good at acting." },
+  { kr:"매력이 있다", en:"to be charming", enFull:"to be charming / to have charm", krEx:"그 가수는 매력이 있어요.", enEx:"That singer is charming." },
+  { kr:"개성이 있다", en:"to have individuality", enFull:"to have a unique personality / individuality", krEx:"그녀는 개성이 있는 가수예요.", enEx:"She is a singer with a unique style." },
+  { kr:"눈길을 끌다", en:"to catch one's eye", enFull:"to catch one's eye / to attract attention", krEx:"그의 무대가 눈길을 끌었어요.", enEx:"His performance caught everyone's eye." },
+  { kr:"재능이 있다", en:"to be talented", enFull:"to be talented / to have talent", krEx:"그녀는 춤에 재능이 있어요.", enEx:"She has talent in dancing." },
+  { kr:"멜로디", en:"melody", enFull:"melody / tune", krEx:"이 노래의 멜로디가 아름다워요.", enEx:"The melody of this song is beautiful." },
+  { kr:"가사", en:"lyrics", enFull:"lyrics (of a song)", krEx:"이 노래 가사가 정말 좋아요.", enEx:"The lyrics of this song are really great." },
+  { kr:"좋은 반응을 얻다", en:"to get a good response", enFull:"to get a good response / to be well-received", krEx:"새 앨범이 좋은 반응을 얻었어요.", enEx:"The new album was well-received." },
+  { kr:"따라 부르다", en:"to sing along", enFull:"to sing along (with someone)", krEx:"가사를 보면서 따라 불렀어요.", enEx:"I sang along while reading the lyrics." },
+  { kr:"방송", en:"broadcast / TV program", enFull:"broadcast / TV or radio program", krEx:"좋아하는 가수가 방송에 나왔어요.", enEx:"My favorite singer appeared on a broadcast." },
+  { kr:"무대", en:"stage / performance", enFull:"stage / performance stage", krEx:"그 가수의 무대는 정말 멋있어요.", enEx:"That singer's stage performance is really cool." },
+  { kr:"팬클럽", en:"fan club", enFull:"fan club / fan community", krEx:"저는 그 가수의 팬클럽에 가입했어요.", enEx:"I joined that singer's fan club." },
+  { kr:"콘서트", en:"concert", enFull:"concert / live performance", krEx:"다음 달에 콘서트가 있어요.", enEx:"There is a concert next month." },
+];
+
+let deck = [...VOCAB];
+let current = 0;
+let flipped = false;
+let mode = 'flash';
+let quizScore = 0, quizAnswered = 0, quizAnsweredCurrent = false;
+
+// ── FLASHCARD ──
+function renderCard() {
+  const v = deck[current];
+  document.getElementById('frontWord').textContent = v.kr;
+  document.getElementById('frontEx').textContent = v.krEx;
+  document.getElementById('backDef').textContent = v.enFull;
+  document.getElementById('backEx').textContent = v.enEx;
+  document.getElementById('cardNum').textContent = `${current+1} / ${deck.length}`;
+  updateProgress(current+1, deck.length);
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === deck.length-1;
+  // reset flip
+  if(flipped){ flipCard(false); }
+}
+
+function flipCard(force) {
+  const scene = document.getElementById('cardScene');
+  if(force === false){ flipped = false; scene.classList.remove('flipped'); return; }
+  flipped = !flipped;
+  scene.classList.toggle('flipped', flipped);
+}
+
+function navigate(dir) {
+  current = Math.max(0, Math.min(deck.length-1, current+dir));
+  flipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  renderCard();
+}
+
+function shuffleCards() {
+  deck = [...deck].sort(() => Math.random()-0.5);
+  current = 0; flipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  renderCard();
+}
+
+// ── PROGRESS ──
+function updateProgress(n, total) {
+  document.getElementById('progressText').textContent = `${n} / ${total}`;
+  document.getElementById('progressFill').style.width = `${(n/total)*100}%`;
+}
+
+// ── QUIZ ──
+let quizDeck = [];
+let quizIdx = 0;
+
+function startQuiz() {
+  quizDeck = [...VOCAB].sort(() => Math.random()-0.5);
+  quizIdx = 0; quizScore = 0; quizAnswered = 0;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = 0;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  quizAnsweredCurrent = false;
+  document.getElementById('quizNextBtn').style.display = 'none';
+  document.getElementById('quizFeedback').textContent = '';
+  updateProgress(quizIdx+1, quizDeck.length);
+
+  const q = quizDeck[quizIdx];
+  document.getElementById('quizWord').textContent = q.kr;
+
+  // Pick 3 wrong options
+  const others = VOCAB.filter(v => v.kr !== q.kr).sort(() => Math.random()-0.5).slice(0,3);
+  const options = [q, ...others].sort(() => Math.random()-0.5);
+  const letters = ['A','B','C','D'];
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt.en}`;
+    btn.onclick = () => answerQuiz(opt.kr === q.kr, btn, q.kr, options, container);
+    container.appendChild(btn);
+  });
+}
+
+function answerQuiz(correct, clickedBtn, correctKr, options, container) {
+  if(quizAnsweredCurrent) return;
+  quizAnsweredCurrent = true;
+  quizAnswered++;
+  if(correct) quizScore++;
+  document.getElementById('quizScore').textContent = quizScore;
+  document.getElementById('quizTotal').textContent = quizAnswered;
+  // Highlight
+  Array.from(container.children).forEach(btn => {
+    btn.classList.add('disabled');
+    const text = btn.textContent.slice(1); // remove letter
+    const isCorrect = options.find(o => o.en === text)?.kr === correctKr;
+    if(btn === clickedBtn) btn.classList.add(correct ? 'correct' : 'wrong');
+    else if(isCorrect) btn.classList.add('correct');
+  });
+  const fb = document.getElementById('quizFeedback');
+  fb.textContent = correct ? '✅ 정답이에요!' : '❌ 틀렸어요. 다시 해봐요!';
+  fb.style.color = correct ? '#6ee7b7' : '#fca5a5';
+  if(quizIdx < quizDeck.length-1) {
+    document.getElementById('quizNextBtn').style.display = '';
+  } else {
+    setTimeout(() => {
+      fb.textContent = `🎉 완료! 최종 점수: ${quizScore} / ${quizDeck.length}`;
+      fb.style.color = '#fbbf24';
+    }, 800);
+  }
+}
+
+function nextQuiz() {
+  quizIdx++;
+  renderQuiz();
+}
+
+function restartQuiz() { startQuiz(); }
+
+// ── LIST ──
+function renderList() {
+  const list = document.getElementById('vocabList');
+  list.innerHTML = VOCAB.map((v,i) => `
+    <div class="vocab-item">
+      <div class="vocab-num">${i+1}</div>
+      <div>
+        <div class="vocab-kr">${v.kr}</div>
+        <div class="vocab-en">${v.enFull}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── MODE SWITCH ──
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['flash','quiz','list'][i] === m);
+  });
+  document.getElementById('flashMode').classList.toggle('hidden', m !== 'flash');
+  document.getElementById('quizMode').classList.toggle('hidden', m !== 'quiz');
+  document.getElementById('listMode').classList.toggle('hidden', m !== 'list');
+  document.getElementById('scoreBadge').style.display = m === 'quiz' ? '' : 'none';
+  if(m === 'quiz') startQuiz();
+  if(m === 'list') renderList();
+  if(m === 'flash') renderCard();
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if(mode === 'flash') {
+    if(e.key === 'ArrowRight') navigate(1);
+    else if(e.key === 'ArrowLeft') navigate(-1);
+    else if(e.key === ' ') { e.preventDefault(); flipCard(); }
+  } else if(mode === 'quiz') {
+    const letters = {'a':0,'b':1,'c':2,'d':3};
+    if(e.key.toLowerCase() in letters && !quizAnsweredCurrent) {
+      const btns = document.querySelectorAll('.quiz-opt');
+      btns[letters[e.key.toLowerCase()]]?.click();
+    } else if((e.key === 'Enter' || e.key === ' ') && quizAnsweredCurrent) {
+      nextQuiz();
+    }
+  }
+});
+
+// INIT
+renderCard();
+</script>
+</body>
+</html>

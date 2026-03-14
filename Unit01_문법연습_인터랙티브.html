@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 01 문법 연습 | 내가 좋아하는 가수</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --navy:#0f2044;
+  --blue:#1B4F8A;
+  --blue2:#2563B0;
+  --sky:#93c5fd;
+  --orange:#E07B30;
+  --orange2:#f9a95a;
+  --green:#10b981;
+  --red:#ef4444;
+  --white:#fff;
+  --card:#1a3260;
+  --card2:#162b52;
+  --border:rgba(255,255,255,0.12);
+  --text:rgba(255,255,255,0.9);
+  --muted:rgba(255,255,255,0.5);
+  --radius:18px;
+}
+
+html,body{
+  min-height:100vh;
+  font-family:'DM Sans','Noto Sans KR',sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* BG pattern */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(37,99,176,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(224,123,48,0.15) 0%, transparent 55%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 36px;
+  background:rgba(10,20,50,0.75);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.hd-left{display:flex;align-items:center;gap:14px;}
+.hd-badge{
+  background:var(--orange);color:#fff;
+  font-weight:700;font-size:12px;letter-spacing:.5px;
+  padding:4px 11px;border-radius:7px;
+}
+.hd-title{font-size:15px;font-weight:700;line-height:1.2;}
+.hd-sub{font-size:11px;color:var(--muted);}
+.hd-right{display:flex;align-items:center;gap:14px;}
+.total-score{
+  background:rgba(255,255,255,0.08);
+  border:1px solid var(--border);
+  border-radius:99px;padding:6px 16px;
+  font-size:13px;font-weight:600;
+}
+.total-score .s{color:#fbbf24;font-weight:800;}
+.btn-reset{
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);
+  color:var(--text);border-radius:10px;
+  padding:8px 16px;font-size:12px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  transition:all .2s;
+}
+.btn-reset:hover{background:rgba(255,255,255,0.15);}
+
+/* ── TABS ── */
+.tabs{
+  display:flex;gap:6px;
+  padding:20px 36px 0;
+  position:relative;z-index:1;
+  flex-wrap:wrap;
+}
+.tab{
+  padding:9px 20px;border-radius:12px 12px 0 0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);border-bottom:none;
+  color:var(--muted);font-weight:600;font-size:13px;
+  cursor:pointer;font-family:inherit;
+  transition:all .2s;
+}
+.tab.active{
+  background:var(--card);
+  color:var(--white);
+  border-color:rgba(255,255,255,0.2);
+}
+
+/* ── PANEL ── */
+.panel{
+  display:none;
+  position:relative;z-index:1;
+  margin:0 20px 30px;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:0 var(--radius) var(--radius) var(--radius);
+  padding:30px 36px;
+}
+.panel.active{display:block;}
+
+/* ── SECTION HEADER ── */
+.sec-head{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:22px;
+}
+.sec-pill{
+  font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  padding:5px 14px;border-radius:99px;flex-shrink:0;
+}
+.pill-blue{background:rgba(37,99,176,0.35);color:var(--sky);border:1px solid rgba(147,197,253,0.3);}
+.pill-orange{background:rgba(224,123,48,0.25);color:var(--orange2);border:1px solid rgba(249,169,90,0.3);}
+.pill-purple{background:rgba(139,92,246,0.25);color:#c4b5fd;border:1px solid rgba(196,181,253,0.3);}
+.sec-title{font-size:18px;font-weight:700;}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+
+.divider{height:1px;background:var(--border);margin:28px 0;}
+
+/* ── CONJUGATION TABLE ── */
+.conj-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
+.conj-table th{
+  background:var(--blue2);color:#fff;
+  font-size:12px;font-weight:700;letter-spacing:.4px;
+  padding:10px 14px;text-align:left;
+}
+.conj-table th:first-child{border-radius:10px 0 0 0;width:42px;text-align:center;}
+.conj-table th:last-child{border-radius:0 10px 0 0;}
+.conj-table td{
+  padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  font-size:14px;vertical-align:middle;
+}
+.conj-table tr:last-child td{border-bottom:none;}
+.conj-table tr:nth-child(odd) td{background:rgba(255,255,255,0.03);}
+.conj-table tr.example-row td{background:rgba(37,99,176,0.18);}
+.num-cell{text-align:center;color:var(--muted);font-size:12px;}
+.base-word{font-weight:700;color:var(--sky);}
+.answer-input{
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:8px;color:#fff;
+  padding:6px 12px;font-size:14px;font-family:inherit;
+  width:100%;max-width:200px;
+  transition:border-color .2s;
+  outline:none;
+}
+.answer-input:focus{border-color:var(--sky);}
+.answer-input.correct{border-color:var(--green);background:rgba(16,185,129,0.12);}
+.answer-input.wrong{border-color:var(--red);background:rgba(239,68,68,0.1);}
+.shown-answer{
+  font-weight:700;color:var(--sky);
+  font-size:14px;
+}
+.given{color:rgba(255,255,255,0.4);font-style:italic;font-size:13px;}
+.ex-input{
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:8px;color:#fff;
+  padding:6px 12px;font-size:13px;font-family:inherit;
+  width:100%;
+  transition:border-color .2s;
+  outline:none;
+}
+.ex-input:focus{border-color:var(--sky);}
+
+/* ── MATCH ── */
+.match-wrap{display:flex;gap:24px;align-items:flex-start;}
+.match-col{flex:1;display:flex;flex-direction:column;gap:10px;}
+.match-col-title{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.match-item{
+  background:rgba(255,255,255,0.06);
+  border:2px solid rgba(255,255,255,0.12);
+  border-radius:12px;padding:12px 16px;
+  font-size:14px;line-height:1.4;
+  cursor:pointer;transition:all .2s;user-select:none;
+  display:flex;align-items:center;gap:10px;
+}
+.match-item:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.28);}
+.match-item.selected{border-color:var(--sky);background:rgba(147,197,253,0.15);}
+.match-item.matched-ok{border-color:var(--green);background:rgba(16,185,129,0.15);cursor:default;}
+.match-item.matched-err{border-color:var(--red);background:rgba(239,68,68,0.12);animation:shake .3s ease;}
+.match-num{
+  font-size:11px;font-weight:800;
+  min-width:24px;height:24px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.1);color:var(--muted);
+  flex-shrink:0;
+}
+.match-item.selected .match-num{background:var(--sky);color:var(--navy);}
+.match-item.matched-ok .match-num{background:var(--green);color:#fff;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── DIALOG ── */
+.dialog-block{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;
+  margin-bottom:14px;
+}
+.dialog-row{display:flex;align-items:stretch;}
+.dialog-label{
+  min-width:44px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;flex-shrink:0;
+}
+.dialog-label.a{background:var(--blue2);color:#fff;}
+.dialog-label.b{background:var(--orange);color:#fff;}
+.dialog-content{flex:1;padding:12px 16px;font-size:14px;line-height:1.5;}
+.dialog-input{
+  width:100%;background:transparent;border:none;
+  color:#fff;font-family:inherit;font-size:14px;
+  outline:none;line-height:1.5;
+  padding:0;
+}
+.dialog-input::placeholder{color:rgba(255,255,255,0.3);}
+.dialog-suffix{color:var(--sky);font-weight:700;}
+
+/* ── FREE WRITE ── */
+.free-block{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:14px;padding:16px 20px;margin-bottom:12px;
+}
+.free-num{
+  font-size:12px;font-weight:800;color:var(--orange2);
+  margin-bottom:8px;letter-spacing:.5px;
+}
+.free-input{
+  width:100%;background:transparent;border:none;
+  border-bottom:1.5px solid rgba(255,255,255,0.2);
+  color:#fff;font-family:inherit;font-size:15px;
+  outline:none;padding:4px 0 8px;
+  transition:border-color .2s;
+}
+.free-input:focus{border-bottom-color:var(--sky);}
+
+/* ── OX QUIZ ── */
+.ox-list{display:flex;flex-direction:column;gap:10px;}
+.ox-item{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;
+}
+.ox-num{
+  min-width:28px;height:28px;border-radius:8px;
+  background:rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;
+}
+.ox-text{flex:1;font-size:14px;line-height:1.5;}
+.ox-btns{display:flex;gap:8px;flex-shrink:0;}
+.ox-btn{
+  padding:7px 18px;border-radius:9px;border:2px solid var(--border);
+  background:transparent;color:var(--muted);
+  font-family:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.ox-btn:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.ox-btn.sel-o{border-color:var(--green);background:rgba(16,185,129,0.2);color:#6ee7b7;}
+.ox-btn.sel-x{border-color:var(--red);background:rgba(239,68,68,0.15);color:#fca5a5;}
+.ox-btn.correct{border-color:var(--green)!important;background:rgba(16,185,129,0.25)!important;color:#6ee7b7!important;}
+.ox-btn.wrong{border-color:var(--red)!important;background:rgba(239,68,68,0.2)!important;color:#fca5a5!important;}
+.ox-feedback{font-size:12px;margin-top:4px;font-weight:600;}
+
+/* ── WORD BANK ── */
+.word-bank{
+  background:rgba(224,123,48,0.1);
+  border:1px solid rgba(224,123,48,0.3);
+  border-radius:12px;padding:14px 18px;margin-bottom:20px;
+}
+.wb-label{font-size:12px;font-weight:800;color:var(--orange2);letter-spacing:.5px;margin-bottom:8px;}
+.wb-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.wb-chip{
+  background:rgba(255,255,255,0.08);
+  border:1.5px solid rgba(255,255,255,0.15);
+  border-radius:99px;padding:5px 14px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .15s;
+}
+.wb-chip:hover{background:rgba(255,255,255,0.15);}
+.wb-chip.used{opacity:.35;text-decoration:line-through;cursor:default;}
+
+/* ── FILL-IN SENTENCE ── */
+.fill-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;margin-bottom:10px;
+}
+.fill-num{font-size:12px;font-weight:800;color:var(--muted);min-width:20px;}
+.fill-blank{
+  display:inline-block;
+  border-bottom:2px solid rgba(255,255,255,0.3);
+  min-width:120px;padding:2px 6px;
+  font-size:14px;font-weight:700;color:var(--sky);
+  cursor:pointer;text-align:center;
+  transition:border-color .2s;
+}
+.fill-blank:hover{border-bottom-color:var(--orange2);}
+.fill-blank.filled{border-bottom-color:var(--green);}
+.fill-blank.wrong-fill{border-bottom-color:var(--red);color:#fca5a5;}
+.fill-text{font-size:14px;line-height:1.6;}
+
+/* ── FREE TABLE (B-3) ── */
+.b3-table{width:100%;border-collapse:collapse;}
+.b3-table th{background:var(--orange);color:#fff;font-size:12px;font-weight:700;padding:10px 14px;text-align:left;}
+.b3-table th:first-child{border-radius:10px 0 0 0;width:180px;}
+.b3-table th:last-child{border-radius:0 10px 0 0;}
+.b3-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px;vertical-align:middle;}
+.b3-table tr:nth-child(odd) td{background:rgba(255,255,255,0.03);}
+.topic-cell{color:var(--orange2);font-weight:600;}
+.b3-input{
+  width:100%;background:transparent;border:none;
+  border-bottom:1.5px dashed rgba(255,255,255,0.2);
+  color:#fff;font-family:inherit;font-size:14px;
+  outline:none;padding:4px 0;
+  transition:border-color .2s;
+}
+.b3-input:focus{border-bottom-color:var(--orange2);}
+
+/* ── COMBINED (C) ── */
+.c-fill-block{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:14px;padding:16px 20px;margin-bottom:14px;
+}
+.c-fill-block .c-num{font-size:12px;font-weight:800;color:#c4b5fd;margin-bottom:10px;}
+.c-fill-block .c-line{font-size:15px;line-height:2;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;}
+.c-blank{
+  display:inline-block;min-width:140px;
+  border-bottom:2px solid rgba(255,255,255,0.25);
+  padding:0 6px;font-size:14px;
+}
+.c-blank:focus{outline:none;border-bottom-color:#c4b5fd;}
+
+.chat-block{margin-bottom:10px;overflow:hidden;border-radius:12px;border:1px solid var(--border);}
+.chat-row{display:flex;}
+.chat-lbl{
+  min-width:46px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;flex-shrink:0;
+}
+.chat-lbl.a{background:var(--blue2);}
+.chat-lbl.b{background:var(--orange);}
+.chat-body{flex:1;padding:12px 16px;}
+.chat-inp{
+  width:100%;background:transparent;border:none;
+  border-bottom:1.5px dashed rgba(255,255,255,0.2);
+  color:#fff;font-family:inherit;font-size:14px;
+  outline:none;padding:2px 0 6px;
+}
+.chat-inp:focus{border-bottom-color:#c4b5fd;}
+
+/* ── CHECK / SCORE ── */
+.check-bar{
+  display:flex;align-items:center;gap:12px;
+  margin-top:20px;flex-wrap:wrap;
+}
+.btn-check{
+  background:var(--orange);color:#fff;
+  border:none;border-radius:12px;
+  padding:11px 28px;font-family:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 16px rgba(224,123,48,0.35);
+}
+.btn-check:hover{background:#c86e28;transform:translateY(-1px);}
+.score-display{
+  background:rgba(255,255,255,0.08);border:1px solid var(--border);
+  border-radius:99px;padding:8px 18px;font-size:13px;font-weight:600;
+}
+.score-display .s{color:#fbbf24;font-weight:800;}
+.feedback-msg{font-size:13px;font-weight:600;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:99px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hd-left">
+    <div class="hd-badge">NAKS 4-2</div>
+    <div>
+      <div class="hd-title">Unit 01 문법 연습 워크시트</div>
+      <div class="hd-sub">내가 좋아하는 가수 · Grammar Practice</div>
+    </div>
+  </div>
+  <div class="hd-right">
+    <div class="total-score">총 점수 <span class="s" id="totalScore">0</span> / <span id="totalPoss">0</span></div>
+    <button class="btn-reset" onclick="resetAll()">🔄 전체 초기화</button>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('a')">📌 파트 A — ~거든요</button>
+  <button class="tab" onclick="switchTab('b')">📌 파트 B — -치고</button>
+  <button class="tab" onclick="switchTab('c')">🌟 파트 C — 종합 연습</button>
+</div>
+
+<!-- ══ PANEL A ══ -->
+<div class="panel active" id="panelA">
+
+  <!-- A-1 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-1</span>
+    <div>
+      <div class="sec-title">활용 연습 · Conjugation Practice</div>
+      <div class="sec-sub">주어진 단어에 알맞은 ~거든요 형태를 써 보세요.</div>
+    </div>
+  </div>
+
+  <table class="conj-table" id="conjTable">
+    <thead>
+      <tr>
+        <th>#</th><th>기본형 (Base form)</th><th>~거든요 형태</th><th>예문 (Example sentence)</th>
+      </tr>
+    </thead>
+    <tbody id="conjBody"></tbody>
+  </table>
+
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkA1()">✅ 채점하기</button>
+    <div class="score-display">점수: <span class="s" id="a1score">-</span></div>
+    <span class="feedback-msg" id="a1msg"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-2 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-2</span>
+    <div>
+      <div class="sec-title">짝 찾기 · Match the Sentences</div>
+      <div class="sec-sub">A (상황)와 B (~거든요 이유)를 클릭해서 연결하세요.</div>
+    </div>
+  </div>
+
+  <div class="match-wrap">
+    <div class="match-col">
+      <div class="match-col-title">A — 상황 / Situation</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div class="match-col">
+      <div class="match-col-title">B — ~거든요 이유 / Reason</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+  <div class="check-bar" style="margin-top:14px;">
+    <div class="score-display">점수: <span class="s" id="a2score">-</span></div>
+    <span class="feedback-msg" id="a2msg"></span>
+    <button class="btn-check" style="background:rgba(255,255,255,0.1);box-shadow:none;font-size:13px;padding:9px 18px;" onclick="resetMatch()">↩ 다시</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- A-3 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-3</span>
+    <div>
+      <div class="sec-title">대화 완성하기 · Complete the Dialogue</div>
+      <div class="sec-sub">~거든요를 사용해서 B의 대답을 완성하세요.</div>
+    </div>
+  </div>
+
+  <div id="dialogBlocks"></div>
+
+  <div class="divider"></div>
+
+  <!-- A-4 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-4</span>
+    <div>
+      <div class="sec-title">자유 쓰기 · Free Writing ✏️</div>
+      <div class="sec-sub">~거든요를 사용해서 나만의 문장 2개를 써 보세요.</div>
+    </div>
+  </div>
+
+  <div class="free-block">
+    <div class="free-num">① 문장 1</div>
+    <input class="free-input" placeholder="여기에 문장을 써 보세요..." id="freeA1">
+  </div>
+  <div class="free-block">
+    <div class="free-num">② 문장 2</div>
+    <input class="free-input" placeholder="여기에 문장을 써 보세요..." id="freeA2">
+  </div>
+
+</div><!-- /panelA -->
+
+<!-- ══ PANEL B ══ -->
+<div class="panel" id="panelB">
+
+  <!-- B-1 OX -->
+  <div class="sec-head">
+    <span class="sec-pill pill-orange">B-1</span>
+    <div>
+      <div class="sec-title">맞는 것을 고르세요 · O / X</div>
+      <div class="sec-sub">-치고가 올바르게 쓰인 문장은 O, 틀린 것은 X를 누르세요.</div>
+    </div>
+  </div>
+
+  <div class="ox-list" id="oxList"></div>
+
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkB1()">✅ 채점하기</button>
+    <div class="score-display">점수: <span class="s" id="b1score">-</span></div>
+    <span class="feedback-msg" id="b1msg"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- B-2 Fill -->
+  <div class="sec-head">
+    <span class="sec-pill pill-orange">B-2</span>
+    <div>
+      <div class="sec-title">문장 완성하기 · Fill in the Blanks</div>
+      <div class="sec-sub">보기에서 알맞은 명사를 골라 -치고 문장을 완성하세요. (단어를 클릭하면 빈칸에 들어갑니다)</div>
+    </div>
+  </div>
+
+  <div class="word-bank">
+    <div class="wb-label">📦 보기 Word Bank</div>
+    <div class="wb-chips" id="wbChips"></div>
+  </div>
+
+  <div id="fillRows"></div>
+
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkB2()">✅ 채점하기</button>
+    <div class="score-display">점수: <span class="s" id="b2score">-</span></div>
+    <button class="btn-check" style="background:rgba(255,255,255,0.1);box-shadow:none;font-size:13px;padding:9px 18px;" onclick="resetB2()">↩ 다시</button>
+    <span class="feedback-msg" id="b2msg"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- B-3 -->
+  <div class="sec-head">
+    <span class="sec-pill pill-orange">B-3</span>
+    <div>
+      <div class="sec-title">나만의 문장 만들기 · Create your own ✏️</div>
+      <div class="sec-sub">주제를 골라 -치고 문장을 만들어 보세요.</div>
+    </div>
+  </div>
+
+  <table class="b3-table">
+    <thead><tr><th>주제 (Topic)</th><th>나의 문장 (My sentence)</th></tr></thead>
+    <tbody id="b3body"></tbody>
+  </table>
+
+</div><!-- /panelB -->
+
+<!-- ══ PANEL C ══ -->
+<div class="panel" id="panelC">
+
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-1</span>
+    <div>
+      <div class="sec-title">빈칸 채우기 · Fill in the Blanks</div>
+      <div class="sec-sub">~거든요 와 -치고 를 모두 사용해서 문장을 완성하세요.</div>
+    </div>
+  </div>
+
+  <div class="c-fill-block">
+    <div class="c-num">① 문장 1</div>
+    <div style="font-size:14px;line-height:2.2;">
+      요즘 K-pop 가수치고
+      <input class="c-blank" id="c1a" placeholder="______________________">
+      사람은 없을 거예요.
+      <br>왜냐하면
+      <input class="c-blank" id="c1b" placeholder="______________________">
+      거든요.
+    </div>
+  </div>
+
+  <div class="c-fill-block">
+    <div class="c-num">② 문장 2</div>
+    <div style="font-size:14px;line-height:2.2;">
+      우리 반 학생치고
+      <input class="c-blank" id="c2a" placeholder="______________________">
+      사람은 없어요.
+      <br>
+      <input class="c-blank" id="c2b" placeholder="______________________">
+      거든요.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-2</span>
+    <div>
+      <div class="sec-title">대화 쓰기 · Write a Dialogue ✏️</div>
+      <div class="sec-sub">좋아하는 가수를 소개하는 짧은 대화를 써 보세요. ~거든요와 -치고를 각각 한 번씩 쓰세요.</div>
+    </div>
+  </div>
+
+  <div id="chatBlocks"></div>
+
+  <div class="check-bar" style="flex-wrap:wrap;gap:16px;">
+    <div style="font-size:13px;color:var(--muted);">
+      ✅ ~거든요 사용: <span id="hasGdeun" style="font-weight:700;">미완성</span>
+      &nbsp;&nbsp;
+      ✅ -치고 사용: <span id="hasChi" style="font-weight:700;">미완성</span>
+    </div>
+    <button class="btn-check" onclick="checkC2()">확인하기</button>
+  </div>
+
+</div><!-- /panelC -->
+
+<script>
+// ─────────────── DATA ───────────────
+const CONJ_ROWS = [
+  {num:1, base:'좋아하다', answer:'좋아하거든요', given:true, exGiven:'저는 K-pop을 좋아하거든요.'},
+  {num:2, base:'귀엽다',   answer:'귀엽거든요',   given:false},
+  {num:3, base:'먹다',     answer:'먹거든요',     given:false},
+  {num:4, base:'바쁘다',   answer:'바쁘거든요',   given:false},
+  {num:5, base:'연예인',   answer:'연예인이거든요',given:true,  exGiven:'그 사람은 연예인이거든요.'},
+  {num:6, base:'가수',     answer:'가수거든요',   given:false},
+  {num:7, base:'음악',     answer:'음악이거든요', given:false},
+];
+
+const MATCH_LEFT = [
+  {id:'m1', text:'오늘 왜 이렇게 일찍 왔어요?'},
+  {id:'m2', text:'왜 저 노래가 좋아요?'},
+  {id:'m3', text:'왜 컴퓨터를 쓰고 싶어요?'},
+  {id:'m4', text:'왜 오늘 밤에 못 나와요?'},
+];
+const MATCH_RIGHT = [
+  {id:'r1', text:'콘서트 표를 예매해야 하거든요.', pairId:'m1'},
+  {id:'r2', text:'멜로디가 정말 아름답거든요.',    pairId:'m2'},
+  {id:'r3', text:'시험이 있거든요.',               pairId:'m3'},
+  {id:'r4', text:'부모님이 오시거든요.',           pairId:'m4'},
+];
+
+const DIALOGS = [
+  {q:'왜 좋아하는 가수의 노래를 매일 들어요?', id:'d1'},
+  {q:'왜 오늘 체육관에 안 갔어요?',           id:'d2'},
+  {q:'이번 주말에 뭐 할 거예요?',              id:'d3'},
+];
+
+const OX_ITEMS = [
+  {id:'ox1', text:'요즘 가수치고 춤을 못 추는 사람은 없어요.',          answer:'O'},
+  {id:'ox2', text:'치고 그 학생은 정말 성실해요.',                       answer:'X'},
+  {id:'ox3', text:'학생치고 방학을 싫어하는 사람은 없어요.',             answer:'O'},
+  {id:'ox4', text:'부모님치고 아이를 사랑하지 않는 분은 없어요.',        answer:'O'},
+  {id:'ox5', text:'강아지치고 귀여운 게 없어요.',                        answer:'X'},
+];
+
+const WB_WORDS = ['노력하는 사람','요즘 아이','패스트푸드','전통놀이','인기 있는 가수'];
+const FILL_SENTENCES = [
+  {id:'f1', suffix:'치고 성공 못 하는 사람은 없어요.',         answer:'노력하는 사람'},
+  {id:'f2', suffix:'치고 건강한 게 없는 것 같아요.',           answer:'패스트푸드'},
+  {id:'f3', suffix:'치고 모르는 아이는 없어요.',               answer:'전통놀이'},
+  {id:'f4', suffix:'치고 연기 안 하는 사람은 없는 것 같아요.',answer:'인기 있는 가수'},
+  {id:'f5', suffix:'치고 요즘 아이들이 좋아하지 않는 게 없어요.',answer:'요즘 아이'},
+];
+
+const B3_TOPICS = ['K-pop 가수','미국 학생','우리 가족','나의 학교','내가 고른 주제: ___'];
+const CHAT_TURNS = ['A','B','A','B','A'];
+
+// ─────────────── STATE ───────────────
+let matchSelLeft  = null;
+let matchSelRight = null;
+let matchDone     = {};   // leftId → rightId
+let fillSelected  = null; // which blank is active
+let fillFilled    = {};   // id → word
+let oxSelected    = {};   // id → 'O'|'X'
+
+// ─────────────── BUILD UI ───────────────
+function buildA1() {
+  const tb = document.getElementById('conjBody');
+  tb.innerHTML = CONJ_ROWS.map(r => `
+    <tr ${r.given?'class="example-row"':''}>
+      <td class="num-cell">${r.num}</td>
+      <td><span class="base-word">${r.base}</span></td>
+      <td>${r.given
+        ? `<span class="shown-answer">${r.answer}</span>`
+        : `<input class="answer-input" id="ci${r.num}" placeholder="________________">`
+      }</td>
+      <td>${r.exGiven
+        ? `<span class="given">${r.exGiven}</span>`
+        : `<input class="ex-input" id="ex${r.num}" placeholder="예문을 써 보세요...">`
+      }</td>
+    </tr>
+  `).join('');
+}
+
+function buildA2() {
+  const lc = document.getElementById('matchLeft');
+  const rc = document.getElementById('matchRight');
+  lc.innerHTML = MATCH_LEFT.map(m => `
+    <div class="match-item" id="${m.id}" onclick="selectLeft('${m.id}')">
+      <span class="match-num">${MATCH_LEFT.indexOf(m)+1}</span>${m.text}
+    </div>`).join('');
+  // shuffle right
+  const shuffled = [...MATCH_RIGHT].sort(()=>Math.random()-.5);
+  rc.innerHTML = shuffled.map(m => `
+    <div class="match-item" id="${m.id}" onclick="selectRight('${m.id}')">
+      <span class="match-num">ㄱ</span>${m.text}
+    </div>`).join('');
+  // label ㄱ ㄴ ㄷ ㄹ
+  rc.querySelectorAll('.match-num').forEach((el,i)=>el.textContent=['ㄱ','ㄴ','ㄷ','ㄹ'][i]);
+}
+
+function buildA3() {
+  document.getElementById('dialogBlocks').innerHTML = DIALOGS.map(d => `
+    <div class="dialog-block">
+      <div class="dialog-row">
+        <div class="dialog-label a">A</div>
+        <div class="dialog-content">${d.q}</div>
+      </div>
+      <div class="dialog-row">
+        <div class="dialog-label b">B</div>
+        <div class="dialog-content">
+          <input class="dialog-input" id="${d.id}" placeholder="대답을 써 보세요...">
+          <span class="dialog-suffix">~거든요.</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function buildOX() {
+  document.getElementById('oxList').innerHTML = OX_ITEMS.map(item=>`
+    <div class="ox-item" id="oxrow_${item.id}">
+      <div class="ox-num">${OX_ITEMS.indexOf(item)+1}</div>
+      <div class="ox-text">${item.text}</div>
+      <div class="ox-btns">
+        <button class="ox-btn" id="obtnO_${item.id}" onclick="pickOX('${item.id}','O')">O</button>
+        <button class="ox-btn" id="obtnX_${item.id}" onclick="pickOX('${item.id}','X')">X</button>
+      </div>
+    </div>`).join('');
+}
+
+function buildB2() {
+  // chips
+  document.getElementById('wbChips').innerHTML = WB_WORDS.map(w=>`
+    <span class="wb-chip" id="chip_${w}" onclick="selectChip('${w}')">${w}</span>`).join('');
+  // rows
+  document.getElementById('fillRows').innerHTML = FILL_SENTENCES.map(f=>`
+    <div class="fill-row">
+      <span class="fill-num">${FILL_SENTENCES.indexOf(f)+1}.</span>
+      <span class="fill-blank" id="blank_${f.id}" onclick="clickBlank('${f.id}')">클릭</span>
+      <span class="fill-text">${f.suffix}</span>
+    </div>`).join('');
+}
+
+function buildB3() {
+  document.getElementById('b3body').innerHTML = B3_TOPICS.map(t=>`
+    <tr><td class="topic-cell">${t}</td>
+    <td><input class="b3-input" placeholder="${t}치고 ..."></td></tr>`).join('');
+}
+
+function buildC() {
+  document.getElementById('chatBlocks').innerHTML = CHAT_TURNS.map((l,i)=>`
+    <div class="chat-block">
+      <div class="chat-row">
+        <div class="chat-lbl ${l.toLowerCase()}">${l}</div>
+        <div class="chat-body">
+          <input class="chat-inp" id="chat${i}" placeholder="${l==='A'?'질문이나 말을 써 보세요...':'대답을 써 보세요...'}">
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ─────────────── MATCH LOGIC ───────────────
+function selectLeft(id) {
+  if(matchDone[id]) return;
+  if(matchSelLeft === id){ matchSelLeft=null; document.getElementById(id).classList.remove('selected'); return; }
+  if(matchSelLeft) document.getElementById(matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = id;
+  document.getElementById(id).classList.add('selected');
+  tryMatch();
+}
+function selectRight(id) {
+  const already = Object.values(matchDone).includes(id);
+  if(already) return;
+  if(matchSelRight === id){ matchSelRight=null; document.getElementById(id).classList.remove('selected'); return; }
+  if(matchSelRight) document.getElementById(matchSelRight)?.classList.remove('selected');
+  matchSelRight = id;
+  document.getElementById(id).classList.add('selected');
+  tryMatch();
+}
+function tryMatch() {
+  if(!matchSelLeft || !matchSelRight) return;
+  const rightData = MATCH_RIGHT.find(r=>r.id===matchSelRight);
+  const leftEl = document.getElementById(matchSelLeft);
+  const rightEl = document.getElementById(matchSelRight);
+  if(rightData.pairId === matchSelLeft) {
+    leftEl.classList.remove('selected'); leftEl.classList.add('matched-ok');
+    rightEl.classList.remove('selected'); rightEl.classList.add('matched-ok');
+    matchDone[matchSelLeft] = matchSelRight;
+    // score
+    const done = Object.keys(matchDone).length;
+    document.getElementById('a2score').textContent = `${done} / ${MATCH_LEFT.length}`;
+    if(done===MATCH_LEFT.length) document.getElementById('a2msg').textContent='🎉 완벽해요!';
+  } else {
+    leftEl.classList.add('matched-err'); rightEl.classList.add('matched-err');
+    setTimeout(()=>{ leftEl.classList.remove('matched-err','selected'); rightEl.classList.remove('matched-err','selected'); },600);
+  }
+  matchSelLeft = null; matchSelRight = null;
+}
+function resetMatch() {
+  matchDone={}; matchSelLeft=null; matchSelRight=null;
+  document.getElementById('a2score').textContent='-';
+  document.getElementById('a2msg').textContent='';
+  buildA2();
+}
+
+// ─────────────── OX ───────────────
+function pickOX(id, val) {
+  oxSelected[id] = val;
+  document.getElementById(`obtnO_${id}`).className = 'ox-btn' + (val==='O'?' sel-o':'');
+  document.getElementById(`obtnX_${id}`).className = 'ox-btn' + (val==='X'?' sel-x':'');
+}
+
+// ─────────────── WORD BANK ───────────────
+let activeBlank = null;
+function clickBlank(fid) {
+  activeBlank = fid;
+  document.querySelectorAll('.fill-blank').forEach(b=>b.style.boxShadow='');
+  document.getElementById('blank_'+fid).style.boxShadow='0 0 0 2px var(--orange2)';
+}
+function selectChip(word) {
+  if(!activeBlank) { alert('먼저 빈칸을 클릭하세요!'); return; }
+  // remove from previous
+  const prev = Object.entries(fillFilled).find(([k,v])=>v===word);
+  if(prev){ fillFilled[prev[0]]=''; renderBlank(prev[0],''); document.getElementById('chip_'+word)?.classList.remove('used'); }
+  // place
+  fillFilled[activeBlank] = word;
+  renderBlank(activeBlank, word);
+  document.getElementById('chip_'+word).classList.add('used');
+  activeBlank = null;
+  document.querySelectorAll('.fill-blank').forEach(b=>b.style.boxShadow='');
+}
+function renderBlank(fid, word) {
+  const el = document.getElementById('blank_'+fid);
+  el.textContent = word || '클릭';
+  el.className = 'fill-blank' + (word ? ' filled' : '');
+}
+function resetB2() {
+  fillFilled={}; activeBlank=null;
+  FILL_SENTENCES.forEach(f=>renderBlank(f.id,''));
+  WB_WORDS.forEach(w=>{ const c=document.getElementById('chip_'+w); if(c) c.classList.remove('used'); });
+  document.getElementById('b2score').textContent='-';
+  document.getElementById('b2msg').textContent='';
+}
+
+// ─────────────── CHECK FUNCTIONS ───────────────
+function checkA1() {
+  let score=0, total=0;
+  CONJ_ROWS.filter(r=>!r.given).forEach(r => {
+    total++;
+    const inp = document.getElementById('ci'+r.num);
+    if(!inp) return;
+    const val = inp.value.trim().replace(/\s+/g,' ');
+    const ok = val === r.answer;
+    inp.classList.toggle('correct', ok);
+    inp.classList.toggle('wrong', !ok);
+    if(ok) score++;
+  });
+  document.getElementById('a1score').textContent = `${score} / ${total}`;
+  document.getElementById('a1msg').textContent = score===total ? '🎉 완벽해요!' : score>=total/2 ? '👍 잘하고 있어요!' : '💪 다시 해봐요!';
+  updateTotal();
+}
+
+function checkB1() {
+  let score=0;
+  OX_ITEMS.forEach(item => {
+    const sel = oxSelected[item.id];
+    if(!sel) return;
+    const ok = sel === item.answer;
+    document.getElementById(`obtnO_${item.id}`).className = 'ox-btn' + (item.answer==='O' ? ' correct' : sel==='O' ? ' wrong' : '');
+    document.getElementById(`obtnX_${item.id}`).className = 'ox-btn' + (item.answer==='X' ? ' correct' : sel==='X' ? ' wrong' : '');
+    if(ok) score++;
+  });
+  const answered = Object.keys(oxSelected).length;
+  document.getElementById('b1score').textContent = `${score} / ${OX_ITEMS.length}`;
+  document.getElementById('b1msg').textContent = score===OX_ITEMS.length ? '🎉 완벽해요!' : `${OX_ITEMS.length - score}개 틀렸어요. 다시 확인해봐요!`;
+  updateTotal();
+}
+
+function checkB2() {
+  let score=0;
+  FILL_SENTENCES.forEach(f => {
+    const filled = fillFilled[f.id] || '';
+    const ok = filled === f.answer;
+    const el = document.getElementById('blank_'+f.id);
+    el.className = 'fill-blank ' + (ok ? 'filled' : 'wrong-fill');
+    if(ok) score++;
+  });
+  document.getElementById('b2score').textContent = `${score} / ${FILL_SENTENCES.length}`;
+  document.getElementById('b2msg').textContent = score===FILL_SENTENCES.length ? '🎉 완벽해요!' : '틀린 것을 다시 확인해봐요!';
+  updateTotal();
+}
+
+function checkC2() {
+  const all = CHAT_TURNS.map((_,i)=>document.getElementById('chat'+i)?.value||'').join(' ');
+  const hasG = all.includes('거든');
+  const hasC = all.includes('치고');
+  const gEl = document.getElementById('hasGdeun');
+  const cEl = document.getElementById('hasChi');
+  gEl.textContent = hasG ? '✅ 완료!' : '⬜ 아직';
+  gEl.style.color = hasG ? '#6ee7b7' : '#fca5a5';
+  cEl.textContent = hasC ? '✅ 완료!' : '⬜ 아직';
+  cEl.style.color = hasC ? '#6ee7b7' : '#fca5a5';
+}
+
+function updateTotal() {
+  // rough tally of checked scores
+  let score=0, poss=0;
+  const a1 = document.getElementById('a1score').textContent;
+  const b1 = document.getElementById('b1score').textContent;
+  const b2 = document.getElementById('b2score').textContent;
+  const a2done = Object.keys(matchDone).length;
+  [a1,b1,b2].forEach(s=>{ const m=s.match(/(\d+)\s*\/\s*(\d+)/); if(m){score+=+m[1];poss+=+m[2];} });
+  score+=a2done; poss+=MATCH_LEFT.length;
+  document.getElementById('totalScore').textContent=score;
+  document.getElementById('totalPoss').textContent=poss;
+}
+
+// ─────────────── TABS ───────────────
+function switchTab(t) {
+  ['a','b','c'].forEach(id=>{
+    document.getElementById('panel'+id.toUpperCase()).classList.toggle('active', id===t);
+  });
+  document.querySelectorAll('.tab').forEach((el,i)=>{
+    el.classList.toggle('active',['a','b','c'][i]===t);
+  });
+}
+
+// ─────────────── RESET ───────────────
+function resetAll() {
+  if(!confirm('정말 초기화할까요? 모든 답이 지워져요.')) return;
+  location.reload();
+}
+
+// ─────────────── INIT ───────────────
+buildA1(); buildA2(); buildA3();
+buildOX(); buildB2(); buildB3(); buildC();
+</script>
+</body>
+</html>
