@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 02 문법 학습지 | 텔레비전 앞으로</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1B4F8A; --blue2:#2563B0; --orange:#E07B30; --orange2:#c85e10;
+  --green:#059669; --green2:#047857; --red:#dc2626; --purple:#7c3aed;
+  --card:#ffffff; --card2:#f8fafc; --card3:#f1f5f9;
+  --border:rgba(0,0,0,0.09); --border2:rgba(0,0,0,0.14);
+  --text:#1e293b; --muted:#64748b; --radius:16px; --radius-sm:10px;
+}
+html,body{min-height:100vh;font-family:'DM Sans','Noto Sans KR',sans-serif;background:#eef2f7;color:var(--text);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 40% at 10% 0%,rgba(37,99,176,0.06) 0%,transparent 55%),
+             radial-gradient(ellipse 50% 35% at 90% 100%,rgba(224,123,48,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+
+header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 32px;background:rgba(255,255,255,0.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);box-shadow:0 1px 12px rgba(0,0,0,0.08);}
+.hd-left{display:flex;align-items:center;gap:12px;}
+.hd-badge{background:var(--orange);color:#fff;font-weight:800;font-size:11px;letter-spacing:.6px;padding:4px 10px;border-radius:6px;text-transform:uppercase;}
+.hd-title{font-size:14px;font-weight:700;line-height:1.3;}
+.hd-sub{font-size:11px;color:#64748b;}
+.hd-right{display:flex;align-items:center;gap:10px;}
+.total-score{background:#fff;border:1px solid var(--border2);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:600;}
+.total-score .s{color:#d97706;font-weight:800;}
+.btn-reset{background:#f1f5f9;border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-reset:hover{background:#e2e8f0;}
+
+.tabs{display:flex;gap:4px;padding:18px 24px 0;position:relative;z-index:1;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:12px 12px 0 0;background:rgba(255,255,255,0.7);border:1px solid var(--border);border-bottom:none;color:#64748b;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.tab.active{background:#fff;color:#1e40af;border-color:var(--border2);font-weight:700;}
+.tab:hover:not(.active){background:rgba(255,255,255,0.9);}
+
+.panel{display:none;position:relative;z-index:1;margin:0 18px 32px;background:#fff;
+  border:1px solid var(--border2);border-radius:0 var(--radius) var(--radius) var(--radius);
+  padding:28px 32px;box-shadow:0 2px 20px rgba(0,0,0,0.06);}
+.panel.active{display:block;}
+
+.sec-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;}
+.sec-pill{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 12px;border-radius:99px;flex-shrink:0;margin-top:3px;}
+.pill-blue{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;}
+.pill-orange{background:#fed7aa;color:#92400e;border:1px solid #fdba74;}
+.pill-green{background:#a7f3d0;color:#065f46;border:1px solid #6ee7b7;}
+.pill-purple{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;}
+.sec-title{font-size:17px;font-weight:700;}
+.sec-sub{font-size:13px;color:#64748b;margin-top:3px;line-height:1.5;}
+.divider{height:1px;background:#e2e8f0;margin:26px 0;}
+
+/* EXPLAIN BOXES */
+.explain-box{border-radius:var(--radius-sm);overflow:hidden;margin-bottom:14px;}
+.explain-head{padding:12px 18px;display:flex;align-items:center;gap:10px;}
+.explain-head .icon{font-size:16px;}
+.explain-head .label{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;}
+.explain-body{padding:14px 18px;font-size:14px;line-height:1.8;border-left:3px solid;}
+.explain-body strong{font-weight:700;}
+.explain-body .hl{color:#1d4ed8;font-weight:700;}
+.explain-body .hl-or{color:#c2410c;font-weight:700;}
+.explain-body .hl-gn{color:#065f46;font-weight:700;}
+.explain-body .hl-rd{color:#b91c1c;font-weight:700;}
+.explain-box.blue .explain-head{background:#dbeafe;} .explain-box.blue .explain-head .label{color:#1e40af;}
+.explain-box.blue .explain-body{background:#eff6ff;border-color:#2563B0;}
+.explain-box.orange .explain-head{background:#fed7aa;} .explain-box.orange .explain-head .label{color:#92400e;}
+.explain-box.orange .explain-body{background:#fff7ed;border-color:#E07B30;}
+.explain-box.green .explain-head{background:#a7f3d0;} .explain-box.green .explain-head .label{color:#065f46;}
+.explain-box.green .explain-body{background:#f0fdf4;border-color:#059669;}
+.explain-box.red .explain-head{background:#fecaca;} .explain-box.red .explain-head .label{color:#991b1b;}
+.explain-box.red .explain-body{background:#fef2f2;border-color:#dc2626;}
+
+/* CONJUGATION */
+.conj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.conj-card{background:#f8fafc;border:1px solid var(--border2);border-radius:var(--radius-sm);overflow:hidden;}
+.conj-card-head{background:#dbeafe;padding:8px 14px;font-size:11px;font-weight:800;letter-spacing:.5px;color:#1e40af;text-transform:uppercase;}
+.conj-card-body{padding:10px 14px;}
+.conj-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:14px;}
+.conj-row:last-child{border-bottom:none;}
+.conj-base{color:#475569;}
+.conj-result{color:#1d4ed8;font-weight:700;}
+.conj-highlight{background:#dbeafe;border-radius:6px;padding:6px 12px;margin-top:8px;font-size:13px;color:#1e40af;}
+
+/* EXAMPLE BLOCKS */
+.ex-block{background:#f8fafc;border:1px solid var(--border2);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:10px;}
+.ex-row{display:flex;align-items:stretch;}
+.ex-num{min-width:36px;background:#2563B0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.ex-num.orange{background:var(--orange);}
+.ex-content{padding:12px 16px;flex:1;}
+.ex-kor{font-size:15px;line-height:1.6;}
+.ex-kor .gram{color:#c2410c;font-weight:700;}
+.ex-eng{font-size:12px;color:#64748b;margin-top:4px;font-style:italic;}
+
+/* DRILL TABLE */
+.drill-table{width:100%;border-collapse:collapse;}
+.drill-table th{background:#1d4ed8;color:#fff;font-size:12px;font-weight:700;padding:10px 14px;text-align:left;}
+.drill-table th.orange{background:var(--orange);}
+.drill-table th:first-child{border-radius:10px 0 0 0;width:36px;text-align:center;}
+.drill-table th:last-child{border-radius:0 10px 0 0;}
+.drill-table td{padding:10px 14px;border-bottom:1px solid #e2e8f0;font-size:14px;vertical-align:middle;}
+.drill-table tr:last-child td{border-bottom:none;}
+.drill-table tr.given-row td{background:#eff6ff;}
+.drill-table tr:not(.given-row):nth-child(even) td{background:#f8fafc;}
+.num-cell{text-align:center;color:#64748b;font-size:12px;}
+.base-word{font-weight:700;color:#1d4ed8;}
+.type-label{font-size:12px;color:#475569;background:#e2e8f0;border-radius:99px;padding:2px 8px;display:inline-block;}
+.ans-input{background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;color:#1e293b;padding:6px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .2s;outline:none;}
+.ans-input:focus{border-color:#3b82f6;}
+.ans-input.correct{border-color:#059669;background:rgba(5,150,105,0.06);}
+.ans-input.wrong{border-color:#dc2626;background:rgba(220,38,38,0.05);}
+.shown-ans{font-weight:700;color:#1d4ed8;}
+.given-label{color:#64748b;font-style:italic;font-size:12px;}
+.ex-field{background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;color:#1e293b;padding:6px 12px;font-size:13px;font-family:inherit;width:100%;outline:none;transition:border-color .2s;}
+.ex-field:focus{border-color:#3b82f6;}
+
+/* MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.match-col-label{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#64748b;margin-bottom:8px;}
+.match-item{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.4;cursor:pointer;transition:all .18s;user-select:none;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.match-item:hover{background:#eff6ff;border-color:#93c5fd;}
+.match-item.selected{border-color:#3b82f6;background:#eff6ff;}
+.match-item.matched-ok{border-color:#059669;background:#f0fdf4;cursor:default;}
+.match-item.matched-err{border-color:#dc2626;background:#fef2f2;animation:shake .3s;}
+.match-badge{min-width:26px;height:26px;border-radius:7px;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.match-item.selected .match-badge{background:#3b82f6;color:#fff;}
+.match-item.matched-ok .match-badge{background:#059669;color:#fff;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* DIALOG */
+.dialog-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.dialog-row{display:flex;align-items:stretch;}
+.d-label{min-width:42px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+.d-label.a{background:#2563B0;color:#fff;}
+.d-label.b{background:var(--orange);color:#fff;}
+.d-body{flex:1;padding:11px 16px;font-size:14px;line-height:1.5;}
+.d-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid #cbd5e1;color:#1e293b;font-family:inherit;font-size:14px;outline:none;padding:2px 0 6px;transition:border-color .2s;}
+.d-input:focus{border-bottom-color:#3b82f6;}
+.d-suffix{color:#c2410c;font-weight:700;}
+
+/* OX */
+.ox-list{display:flex;flex-direction:column;gap:10px;}
+.ox-item{display:flex;align-items:flex-start;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;}
+.ox-num{min-width:26px;height:26px;border-radius:7px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#64748b;flex-shrink:0;margin-top:1px;}
+.ox-wrap{flex:1;}
+.ox-text{font-size:14px;line-height:1.5;margin-bottom:8px;}
+.ox-btns{display:flex;gap:8px;}
+.ox-btn{padding:6px 18px;border-radius:8px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;}
+.ox-btn:hover{background:#f1f5f9;}
+.ox-btn.sel-o{border-color:#059669;background:rgba(5,150,105,0.1);color:#065f46;}
+.ox-btn.sel-x{border-color:#dc2626;background:rgba(220,38,38,0.08);color:#b91c1c;}
+.ox-btn.is-correct{border-color:#059669!important;background:rgba(5,150,105,0.15)!important;color:#065f46!important;}
+.ox-btn.is-wrong{border-color:#dc2626!important;background:rgba(220,38,38,0.12)!important;color:#b91c1c!important;}
+.ox-correction{display:none;margin-top:8px;font-size:13px;background:#fef2f2;border-radius:7px;padding:8px 12px;border-left:3px solid #dc2626;}
+.ox-correction .label{color:#b91c1c;font-weight:700;font-size:11px;text-transform:uppercase;margin-bottom:3px;}
+
+/* WORD BANK */
+.word-bank{background:#fff7ed;border:1px solid #fdba74;border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+.wb-label{font-size:11px;font-weight:800;color:#c2410c;letter-spacing:.5px;margin-bottom:10px;}
+.wb-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.wb-chip{background:#fff;border:1.5px solid #d1d5db;border-radius:99px;padding:5px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.wb-chip:hover:not(.used){background:#fff7ed;border-color:var(--orange);}
+.wb-chip.used{opacity:.3;text-decoration:line-through;cursor:default;}
+.fill-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:13px 16px;margin-bottom:10px;}
+.fill-n{font-size:12px;font-weight:800;color:#64748b;min-width:20px;}
+.fill-blank{display:inline-flex;align-items:center;justify-content:center;min-width:110px;border-bottom:2px solid #f97316;padding:3px 8px;font-size:14px;font-weight:700;color:#c2410c;cursor:pointer;transition:all .18s;border-radius:4px 4px 0 0;}
+.fill-blank:hover{background:rgba(249,115,22,0.06);}
+.fill-blank.active-blank{background:rgba(224,123,48,0.1);box-shadow:0 0 0 2px rgba(224,123,48,0.3);}
+.fill-blank.filled{border-bottom-color:#059669;color:#065f46;}
+.fill-blank.wrong-fill{border-bottom-color:#dc2626;color:#b91c1c;}
+.fill-text{font-size:14px;line-height:1.5;}
+
+/* BUILD TABLE */
+.build-table{width:100%;border-collapse:collapse;}
+.build-table th{background:#047857;color:#fff;font-size:12px;font-weight:700;padding:10px 14px;text-align:left;}
+.build-table th:first-child{border-radius:10px 0 0 0;}
+.build-table th:last-child{border-radius:0 10px 0 0;}
+.build-table td{padding:10px 14px;border-bottom:1px solid #e2e8f0;font-size:14px;vertical-align:middle;}
+.build-table tr:nth-child(even) td{background:#f8fafc;}
+.build-table tr.sample-row td{background:#f0fdf4;}
+.topic-cell{color:#065f46;font-weight:600;}
+.build-input{width:100%;background:transparent;border:none;border-bottom:1.5px dashed #94a3b8;color:#1e293b;font-family:inherit;font-size:14px;outline:none;padding:4px 0;transition:border-color .2s;}
+.build-input:focus{border-bottom-color:#059669;}
+
+/* FREE WRITE */
+.free-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;}
+.free-num{font-size:11px;font-weight:800;color:#c2410c;letter-spacing:.4px;margin-bottom:8px;}
+.free-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid #cbd5e1;color:#1e293b;font-family:inherit;font-size:15px;outline:none;padding:4px 0 8px;transition:border-color .2s;}
+.free-input:focus{border-bottom-color:#3b82f6;}
+
+/* COMBINED C */
+.choose-row{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;flex-wrap:wrap;}
+.choose-n{font-size:12px;font-weight:800;color:#6d28d9;min-width:24px;}
+.choose-btn{padding:6px 16px;border-radius:8px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.choose-btn:hover{background:#f1f5f9;}
+.choose-btn.sel{border-color:#7c3aed;background:#ede9fe;color:#5b21b6;}
+.choose-btn.correct-pick{border-color:#059669!important;background:rgba(5,150,105,0.12)!important;color:#065f46!important;}
+.choose-btn.wrong-pick{border-color:#dc2626!important;background:rgba(220,38,38,0.1)!important;color:#b91c1c!important;}
+
+.cblank-input{display:inline-block;background:#f1f5f9;border:none;border-bottom:2px solid #a78bfa;color:#1e293b;font-family:inherit;font-size:14px;outline:none;padding:2px 8px;min-width:140px;transition:border-color .2s;}
+.cblank-input:focus{border-bottom-color:#7c3aed;}
+
+.chat-block{border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:8px;}
+.chat-row{display:flex;}
+.chat-lbl{min-width:42px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+.chat-lbl.a{background:#2563B0;color:#fff;}
+.chat-lbl.b{background:var(--orange);color:#fff;}
+.chat-body{flex:1;padding:11px 16px;}
+.chat-inp{width:100%;background:transparent;border:none;border-bottom:1.5px dashed #94a3b8;color:#1e293b;font-family:inherit;font-size:14px;outline:none;padding:2px 0 6px;transition:border-color .2s;}
+.chat-inp:focus{border-bottom-color:#7c3aed;}
+
+/* COMPARE */
+.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.compare-card{border-radius:var(--radius-sm);overflow:hidden;}
+.compare-head{padding:10px 16px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+.compare-card.ok .compare-head{background:#a7f3d0;color:#065f46;}
+.compare-card.ng .compare-head{background:#fecaca;color:#991b1b;}
+.compare-card.ok .compare-body{background:#f0fdf4;padding:12px 16px;font-size:14px;line-height:1.7;}
+.compare-card.ng .compare-body{background:#fef2f2;padding:12px 16px;font-size:14px;line-height:1.7;}
+.compare-body .note{font-size:12px;margin-top:6px;opacity:.7;font-style:italic;}
+
+/* INFO CHIP */
+.info-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.info-chip{display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:99px;padding:5px 12px;font-size:12px;}
+.info-chip .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* CHECK BAR */
+.check-bar{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.btn-check{background:var(--orange);color:#fff;border:none;border-radius:11px;padding:10px 24px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(224,123,48,0.25);}
+.btn-check:hover{background:#c86e28;transform:translateY(-1px);}
+.btn-secondary{background:#f1f5f9;border:1px solid #e2e8f0;color:var(--text);border-radius:11px;padding:9px 18px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-secondary:hover{background:#e2e8f0;}
+.score-chip{background:#fff;border:1px solid var(--border2);border-radius:99px;padding:7px 16px;font-size:13px;font-weight:600;}
+.score-chip .s{color:#d97706;font-weight:800;}
+.feedback{font-size:13px;font-weight:600;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:99px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-left">
+    <div class="hd-badge">NAKS 4-2</div>
+    <div>
+      <div class="hd-title">Unit 02 문법 학습지 · Grammar Study Sheet</div>
+      <div class="hd-sub">텔레비전 앞으로 · ~는 중이다 &amp; ~(으)ㄴ/는 대신(에)</div>
+    </div>
+  </div>
+  <div class="hd-right">
+    <div class="total-score">총 점수 <span class="s" id="totalScore">0</span> / <span id="totalPoss">0</span></div>
+    <button class="btn-reset" onclick="resetAll()">🔄 전체 초기화</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('a')">📘 파트 A — ~는 중이다</button>
+  <button class="tab" onclick="switchTab('b')">📗 파트 B — ~(으)ㄴ/는 대신(에)</button>
+  <button class="tab" onclick="switchTab('c')">🌟 파트 C — 종합 연습</button>
+</div>
+
+<!-- ══ PANEL A ══ -->
+<div class="panel active" id="panelA">
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-①</span>
+    <div><div class="sec-title">설명 · Explanation</div><div class="sec-sub">먼저 설명을 읽고 이해해 보세요.</div></div>
+  </div>
+
+  <div class="explain-box blue">
+    <div class="explain-head"><span class="icon">🇺🇸</span><span class="label">English</span></div>
+    <div class="explain-body">
+      <strong>~는 중이다</strong> is attached to a <span class="hl">verb stem</span> to indicate that an action is <span class="hl">currently in progress</span>.<br>
+      It is similar to the English <em>"-ing"</em> form — something is happening right now and is not yet finished.<br><br>
+      <span class="hl-rd">⚠️ Note:</span> Only use with <strong>action verbs</strong> (동사). Do NOT use with adjectives (형용사).
+    </div>
+  </div>
+  <div class="explain-box orange">
+    <div class="explain-head"><span class="icon">🇰🇷</span><span class="label">한국어</span></div>
+    <div class="explain-body">
+      <strong>~는 중이다</strong>는 동사 뒤에 붙어서 <span class="hl-or">지금 어떤 동작이 진행 중</span>임을 나타내요.<br>
+      영어의 <em>"-ing"</em>처럼, 아직 끝나지 않고 계속되고 있는 동작에 사용해요.<br><br>
+      📌 구조: <strong>동사 어간 + 는 중이다 / 는 중이에요 / 는 중이야</strong>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:22px;">
+    <span class="sec-pill pill-blue">A-②</span>
+    <div><div class="sec-title">어떻게 만들어요? · How to Conjugate</div></div>
+  </div>
+  <div class="conj-grid">
+    <div class="conj-card">
+      <div class="conj-card-head">동사 (Action Verb)</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">보다</span><span class="conj-result">보는 중이에요</span></div>
+        <div class="conj-row"><span class="conj-base">먹다</span><span class="conj-result">먹는 중이에요</span></div>
+        <div class="conj-row"><span class="conj-base">공부하다</span><span class="conj-result">공부하는 중이에요</span></div>
+        <div class="conj-row"><span class="conj-base">시청하다</span><span class="conj-result">시청하는 중이에요</span></div>
+        <div class="conj-highlight">동사 어간 + 는 중이에요</div>
+      </div>
+    </div>
+    <div class="conj-card">
+      <div class="conj-card-head">반말 / 존댓말</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">반말 (친구)</span><span class="conj-result">~는 중이야</span></div>
+        <div class="conj-row"><span class="conj-base">존댓말 (어른)</span><span class="conj-result">~는 중이에요</span></div>
+        <div class="conj-row"><span class="conj-base">높임말 (선생님)</span><span class="conj-result">~시는 중이에요</span></div>
+        <div class="conj-row"><span class="conj-base">과거</span><span class="conj-result">~는 중이었어요</span></div>
+        <div class="conj-highlight">상황에 따라 어미가 달라져요!</div>
+      </div>
+    </div>
+  </div>
+  <div class="info-row">
+    <div class="info-chip"><div class="dot" style="background:#ef4444"></div>형용사에는 쓸 수 없어요! ❌ 예쁜 중이에요 (X)</div>
+    <div class="info-chip"><div class="dot" style="background:#3b82f6"></div>지금 진행 중인 동작에만 사용해요</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-③</span>
+    <div><div class="sec-title">예문 · Example Sentences</div></div>
+  </div>
+  <div id="exA"></div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-④</span>
+    <div><div class="sec-title">활용 연습 · Conjugation Drill</div><div class="sec-sub">주어진 동사에 알맞은 ~는 중이에요 형태를 써 보세요.</div></div>
+  </div>
+  <table class="drill-table"><thead><tr><th>#</th><th>기본형 (Base)</th><th>종류</th><th>~는 중이에요</th><th>나의 예문</th></tr></thead><tbody id="drillABody"></tbody></table>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkDrillA()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="drillAScore">-</span></div>
+    <span class="feedback" id="drillAFB"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑤</span>
+    <div><div class="sec-title">짝 찾기 · Match  <span style="font-size:13px;font-weight:400;color:#64748b">(교재 p.24)</span></div><div class="sec-sub">A(질문)와 B(~는 중이에요 대답)를 연결하세요.</div></div>
+  </div>
+  <div class="match-wrap"><div><div class="match-col-label">A — 질문</div><div id="matchAL"></div></div><div><div class="match-col-label">B — ~는 중이에요 대답</div><div id="matchAR"></div></div></div>
+  <div class="check-bar">
+    <div class="score-chip">점수: <span class="s" id="matchAScore">-</span></div>
+    <span class="feedback" id="matchAFB"></span>
+    <button class="btn-secondary" onclick="resetMatchA()">↩ 다시</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑥</span>
+    <div><div class="sec-title">대화 완성하기 · Complete the Dialogue</div><div class="sec-sub">~는 중이에요/중이야를 사용해서 대답을 완성하세요.</div></div>
+  </div>
+  <div id="dialogA"></div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-blue">A-⑦</span>
+    <div><div class="sec-title">자유 쓰기 · Free Writing ✏️</div><div class="sec-sub">지금 하고 있는 일이나 상상 속의 상황을 ~는 중이에요로 3개 써 보세요.</div></div>
+  </div>
+  <div class="free-block"><div class="free-num">① 문장 1</div><input class="free-input" placeholder="예: 저는 지금 한국어를 공부하는 중이에요."></div>
+  <div class="free-block"><div class="free-num">② 문장 2</div><input class="free-input" placeholder="예: 엄마는 저녁을 만드는 중이에요."></div>
+  <div class="free-block"><div class="free-num">③ 문장 3</div><input class="free-input" placeholder="여기에 문장을 써 보세요..."></div>
+
+</div>
+
+<!-- ══ PANEL B ══ -->
+<div class="panel" id="panelB">
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-①</span>
+    <div><div class="sec-title">설명 · Explanation</div><div class="sec-sub">먼저 설명을 읽고 이해해 보세요.</div></div>
+  </div>
+
+  <div class="explain-box green">
+    <div class="explain-head"><span class="icon">🇺🇸</span><span class="label">English</span></div>
+    <div class="explain-body">
+      <strong>~(으)ㄴ/는 대신(에)</strong> is used to express a <span class="hl-gn">substitution or contrast</span> — doing one thing instead of another, or getting something in return for something else.<br>
+      Think of it as <em>"instead of…"</em> or <em>"in place of…"</em><br><br>
+      It can be attached to <span class="hl-gn">nouns, verbs, or adjectives</span>.
+    </div>
+  </div>
+  <div class="explain-box orange">
+    <div class="explain-head"><span class="icon">🇰🇷</span><span class="label">한국어</span></div>
+    <div class="explain-body">
+      <strong>~(으)ㄴ/는 대신(에)</strong>는 앞에 나온 것 대신 다른 것을 하거나, <span class="hl-or">무언가를 대체하거나 교환</span>할 때 사용해요.<br><br>
+      📌 구조:<br>
+      &nbsp;&nbsp;• <strong>동사 현재:</strong> 동사 어간 + 는 대신(에)<br>
+      &nbsp;&nbsp;• <strong>동사 과거:</strong> 동사 어간 + (으)ㄴ 대신(에)<br>
+      &nbsp;&nbsp;• <strong>명사:</strong> 명사 + 대신(에)
+    </div>
+  </div>
+
+  <div class="compare-wrap">
+    <div class="compare-card ok">
+      <div class="compare-head">✅ 현재형 (Present)</div>
+      <div class="compare-body">텔레비전을 <strong>보는 대신에</strong> 산책했어요.<br><div class="note">→ Instead of watching TV, I took a walk.</div></div>
+    </div>
+    <div class="compare-card ok">
+      <div class="compare-head">✅ 명사형 (Noun)</div>
+      <div class="compare-body">선물 <strong>대신에</strong> 용돈을 주세요.<br><div class="note">→ Please give me allowance instead of a gift.</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:10px;">
+    <span class="sec-pill pill-green">B-②</span>
+    <div><div class="sec-title">어떻게 만들어요? · How to Conjugate</div></div>
+  </div>
+  <div class="conj-grid">
+    <div class="conj-card">
+      <div class="conj-card-head" style="background:#a7f3d0;color:#065f46;">동사 현재 (Verb - Present)</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">보다</span><span class="conj-result" style="color:#065f46;">보는 대신에</span></div>
+        <div class="conj-row"><span class="conj-base">먹다</span><span class="conj-result" style="color:#065f46;">먹는 대신에</span></div>
+        <div class="conj-row"><span class="conj-base">쉬다</span><span class="conj-result" style="color:#065f46;">쉬는 대신에</span></div>
+        <div class="conj-highlight" style="background:#a7f3d0;color:#065f46;">동사 어간 + 는 대신(에)</div>
+      </div>
+    </div>
+    <div class="conj-card">
+      <div class="conj-card-head" style="background:#a7f3d0;color:#065f46;">동사 과거 / 명사 (Past / Noun)</div>
+      <div class="conj-card-body">
+        <div class="conj-row"><span class="conj-base">먹다 (과거)</span><span class="conj-result" style="color:#065f46;">먹은 대신에</span></div>
+        <div class="conj-row"><span class="conj-base">보다 (과거)</span><span class="conj-result" style="color:#065f46;">본 대신에</span></div>
+        <div class="conj-row"><span class="conj-base">선물 (명사)</span><span class="conj-result" style="color:#065f46;">선물 대신에</span></div>
+        <div class="conj-highlight" style="background:#a7f3d0;color:#065f46;">어간 + (으)ㄴ 대신(에) / 명사 + 대신(에)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-③</span>
+    <div><div class="sec-title">예문 · Example Sentences</div></div>
+  </div>
+  <div id="exB"></div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-④</span>
+    <div><div class="sec-title">활용 연습 · Conjugation Drill</div><div class="sec-sub">주어진 단어에 알맞은 대신(에) 형태를 써 보세요.</div></div>
+  </div>
+  <table class="drill-table"><thead><tr><th>#</th><th>기본형</th><th>종류</th><th class="orange">대신(에) 형태</th><th>나의 예문</th></tr></thead><tbody id="drillBBody"></tbody></table>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkDrillB()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="drillBScore">-</span></div>
+    <span class="feedback" id="drillBFB"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑤</span>
+    <div><div class="sec-title">O / X — 맞으면 O, 틀리면 X</div><div class="sec-sub">대신(에)가 올바르게 쓰인 문장은 O, 틀린 것은 X를 누르세요.</div></div>
+  </div>
+  <div class="ox-list" id="oxList"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkOX()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="oxScore">-</span></div>
+    <span class="feedback" id="oxFB"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑥</span>
+    <div><div class="sec-title">문장 만들기 · Build a Sentence  <span style="font-size:13px;font-weight:400;color:#64748b">(교재 p.25)</span></div><div class="sec-sub">보기처럼 대신(에)를 사용해서 문장을 만들어 보세요.</div></div>
+  </div>
+  <table class="build-table"><thead><tr><th>대신 하는 것 (Instead of)</th><th>하는 것 (Did / Will do)</th><th>나의 문장</th></tr></thead><tbody id="buildBody"></tbody></table>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑦</span>
+    <div><div class="sec-title">단어 골라 넣기 · Word Bank Fill-in</div><div class="sec-sub">보기에서 알맞은 말을 골라 빈칸에 넣으세요.</div></div>
+  </div>
+  <div class="word-bank"><div class="wb-label">📦 보기 Word Bank</div><div class="wb-chips" id="wbChips"></div></div>
+  <div id="fillRows"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkFill()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="fillScore">-</span></div>
+    <button class="btn-secondary" onclick="resetFill()">↩ 다시</button>
+    <span class="feedback" id="fillFB"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-green">B-⑧</span>
+    <div><div class="sec-title">자유 쓰기 · Free Writing ✏️</div><div class="sec-sub">대신(에)를 사용해서 나만의 문장을 3개 써 보세요.</div></div>
+  </div>
+  <div class="free-block"><div class="free-num">① 문장 1</div><input class="free-input" placeholder="예: 오늘은 드라마를 보는 대신에 책을 읽었어요."></div>
+  <div class="free-block"><div class="free-num">② 문장 2</div><input class="free-input" placeholder="예: 밥 대신에 빵을 먹었어요."></div>
+  <div class="free-block"><div class="free-num">③ 문장 3</div><input class="free-input" placeholder="여기에 문장을 써 보세요..."></div>
+
+</div>
+
+<!-- ══ PANEL C ══ -->
+<div class="panel" id="panelC">
+
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-①</span>
+    <div><div class="sec-title">알맞은 문법 고르기 · Choose the Correct Grammar</div><div class="sec-sub">~는 중이다 와 ~대신(에) 중에서 알맞은 것을 고르세요.</div></div>
+  </div>
+  <div id="chooseArea"></div>
+  <div class="check-bar">
+    <button class="btn-check" onclick="checkChoose()">✅ 채점하기</button>
+    <div class="score-chip">점수: <span class="s" id="chooseScore">-</span></div>
+    <span class="feedback" id="chooseFB"></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-②</span>
+    <div><div class="sec-title">빈칸 채우기 · Fill in the Blanks</div><div class="sec-sub">~는 중이다 또는 ~대신(에)를 사용해서 빈칸을 완성하세요.</div></div>
+  </div>
+  <div id="cFillArea"></div>
+
+  <div class="divider"></div>
+
+  <div class="sec-head">
+    <span class="sec-pill pill-purple">C-③</span>
+    <div><div class="sec-title">대화 쓰기 · Write a Dialogue ✏️</div><div class="sec-sub">좋아하는 TV 프로그램에 대해 이야기하는 대화를 써 보세요. ~는 중이다 와 대신(에)를 각각 한 번씩 사용하세요.</div></div>
+  </div>
+  <div id="chatArea"></div>
+  <div class="check-bar" style="gap:16px;">
+    <div style="font-size:13px;">
+      ✅ ~는 중이다: <span id="hasJung" style="font-weight:700;color:#64748b">미완성</span>
+      &nbsp;&nbsp;
+      ✅ 대신(에): <span id="hasDaesin" style="font-weight:700;color:#64748b">미완성</span>
+    </div>
+    <button class="btn-check" onclick="checkChat()">확인하기</button>
+  </div>
+
+</div>
+
+<script>
+// ══ DATA ══
+const EX_A = [
+  {kor:'집에 와서 잠깐 쉬면서 오락 프로그램을 보는 중이에요.', eng:'I came home and am in the middle of watching an entertainment program while resting.'},
+  {kor:'자막 없이 한국어를 보고 싶어서 요즘 한국어를 열심히 공부하는 중이에요.', eng:'I\'m currently studying Korean hard because I want to watch without subtitles.'},
+  {kor:'A: 문제 다 풀었니?  B: 아니요, 지금 마지막 문제를 푸는 중이에요.', eng:'A: Did you finish all the questions?  B: No, I\'m in the middle of the last one.'},
+];
+
+const EX_B = [
+  {kor:'어제 저녁에는 날씨가 좋아서 텔레비전을 보는 대신 산책했어요.', eng:'Yesterday evening the weather was nice, so I took a walk instead of watching TV.'},
+  {kor:'다음 시간에는 한국어 수업을 하는 대신에 만들기 수업을 할 거예요.', eng:'Next class, we\'ll do a craft activity instead of a Korean language lesson.'},
+  {kor:'A: 이번 생일에는 어떤 선물을 받고 싶니?  B: 아빠, 이번 생일에는 선물 대신에 용돈을 주시면 안 돼요?', eng:'A: What present do you want this birthday?  B: Dad, can\'t you give me allowance instead of a gift?'},
+  {kor:'빵을 먹는 대신에 밥을 먹을 거예요.', eng:'I\'ll eat rice instead of bread.'},
+];
+
+const DRILL_A = [
+  {n:1, base:'보다',      type:'동사', ans:'보는 중이에요',       given:true,  ex:'드라마를 보는 중이에요.'},
+  {n:2, base:'먹다',      type:'동사', ans:'먹는 중이에요',       given:false},
+  {n:3, base:'공부하다',  type:'동사', ans:'공부하는 중이에요',   given:false},
+  {n:4, base:'시청하다',  type:'동사', ans:'시청하는 중이에요',   given:false},
+  {n:5, base:'기다리다',  type:'동사', ans:'기다리는 중이에요',   given:false},
+  {n:6, base:'읽다',      type:'동사', ans:'읽는 중이에요',       given:false},
+  {n:7, base:'이야기하다',type:'동사', ans:'이야기하는 중이에요', given:false},
+  {n:8, base:'쓰다',      type:'동사', ans:'쓰는 중이에요',       given:false},
+];
+
+const DRILL_B = [
+  {n:1, base:'보다 (현재)',  type:'동사',  ans:'보는 대신에',   given:true,  ex:'TV를 보는 대신에 산책해요.'},
+  {n:2, base:'먹다 (현재)',  type:'동사',  ans:'먹는 대신에',   given:false},
+  {n:3, base:'쉬다 (현재)',  type:'동사',  ans:'쉬는 대신에',   given:false},
+  {n:4, base:'가다 (현재)',  type:'동사',  ans:'가는 대신에',   given:false},
+  {n:5, base:'보다 (과거)',  type:'동사',  ans:'본 대신에',     given:false},
+  {n:6, base:'먹다 (과거)',  type:'동사',  ans:'먹은 대신에',   given:false},
+  {n:7, base:'선물',         type:'명사',  ans:'선물 대신에',   given:true,  ex:'선물 대신에 용돈을 주세요.'},
+  {n:8, base:'드라마',       type:'명사',  ans:'드라마 대신에', given:false},
+];
+
+const MATCH_AL = [
+  {id:'al1', text:'로라는 지금 뭐 해?'},
+  {id:'al2', text:'로라 엄마는 지금 뭐 하세요?'},
+  {id:'al3', text:'로라 아빠는 지금 뭐 하세요?'},
+  {id:'al4', text:'로라 할머니는 지금 뭐 하세요?'},
+];
+const MATCH_AR = [
+  {id:'ar1', text:'퀴즈 프로그램을 보는 중이야.', pair:'al1'},
+  {id:'ar2', text:'책을 읽는 중이세요.', pair:'al2'},
+  {id:'ar3', text:'앞집 아저씨하고 이야기하는 중이세요.', pair:'al3'},
+  {id:'ar4', text:'꽃에 물을 주는 중이세요.', pair:'al4'},
+];
+
+const DIALOG_A = [
+  {q:'A: 지금 뭐 해?', id:'da1', hint:'드라마를 _______________ 중이야.'},
+  {q:'A: 아침 먹었어요?', id:'da2', hint:'지금 _______________ 중이에요.'},
+  {q:'A: 오늘 뭐 할 거예요?', id:'da3', hint:'지금 _______________ 중이에요.'},
+];
+
+const OX_DATA = [
+  {id:'ox1', text:'저는 지금 드라마를 보는 중이에요.', ans:'O', correction:null},
+  {id:'ox2', text:'저는 지금 예쁜 중이에요.', ans:'X', correction:'→ ~는 중이다는 형용사에 쓸 수 없어요! (예: 저는 지금 화장하는 중이에요.)'},
+  {id:'ox3', text:'엄마는 저녁을 만드는 중이세요.', ans:'O', correction:null},
+  {id:'ox4', text:'선물 대신에 용돈을 주시면 안 돼요?', ans:'O', correction:null},
+  {id:'ox5', text:'텔레비전을 대신에 산책했어요.', ans:'X', correction:'→ 명사만 대신에 앞에 올 수 있어요. 동사는 ~는 대신에를 써야 해요. (텔레비전을 보는 대신에 산책했어요.)'},
+  {id:'ox6', text:'공부하는 대신에 게임을 했어요.', ans:'O', correction:null},
+];
+
+const BUILD_DATA = [
+  {a:'집에서 쉬다',        b:'한글 학교에서 한국어를 공부하다', sample:'집에서 쉬는 대신에 한글 학교에서 한국어를 공부해요.', isSample:true},
+  {a:'텔레비전 뉴스를 보다', b:'신문을 읽다',   isSample:false},
+  {a:'빵을 먹다',           b:'밥을 먹다',      isSample:false},
+  {a:'집에서 쉬다',         b:'박물관에 가다',  isSample:false},
+  {a:'선물',                b:'용돈',           isSample:false},
+  {a:'내가 고른 주제: ___', b:'',               isSample:false},
+];
+
+const WB_WORDS = ['드라마를 보는','신문을 읽는','한국어 캠프에 참가하는','생방송으로 보는','중계방송을 보는'];
+const FILL_DATA = [
+  {id:'fb1', pre:'', blank:true, suf:' 대신에 유튜브를 봐요.', ans:'드라마를 보는'},
+  {id:'fb2', pre:'뉴스를 시청하는 대신에 ', blank:true, suf:' 거예요.', ans:'신문을 읽는'},
+  {id:'fb3', pre:'', blank:true, suf:' 대신에 한국 여행을 갈 거예요.', ans:'한국어 캠프에 참가하는'},
+  {id:'fb4', pre:'녹화된 영상 대신에 ', blank:true, suf:' 거예요.', ans:'생방송으로 보는'},
+  {id:'fb5', pre:'직접 경기장에 가는 대신에 ', blank:true, suf:' 거예요.', ans:'중계방송을 보는'},
+];
+
+const CHOOSE_DATA = [
+  {id:'c1', pre:'A: 지금 뭐 해?  B: 드라마를 ', opts:['보는 중이야','보는 대신에'], ans:'보는 중이야', post:'.'},
+  {id:'c2', pre:'오늘은 드라마를 ', opts:['보는 중이야','보는 대신에'], ans:'보는 대신에', post:' 공부했어요.'},
+  {id:'c3', pre:'엄마는 지금 저녁을 만드', opts:['는 중이에요','는 대신에'], ans:'는 중이에요', post:'.'},
+  {id:'c4', pre:'선물 ', opts:['는 중이에요','대신에'], ans:'대신에', post:' 용돈을 주세요.'},
+  {id:'c5', pre:'A: 숙제 다 했어?  B: 아니요, 지금 하', opts:['는 중이야','는 대신에'], ans:'는 중이야', post:'.'},
+];
+
+const CFILL_DATA = [
+  {id:'cf1', pre:'저는 지금 좋아하는 드라마를 ', ph:'~는 중이에요', suf:'.'},
+  {id:'cf2', pre:'텔레비전을 ', ph:'~는 대신(에)', suf:' 독서를 했어요.'},
+  {id:'cf3', pre:'엄마는 전화 ', ph:'명사+대신(에)', suf:' 문자를 보내셨어요.'},
+  {id:'cf4', pre:'동생은 지금 퀴즈 프로그램을 ', ph:'~는 중이에요', suf:'.'},
+];
+
+// ══ STATE ══
+let matchASelL=null, matchASelR=null, matchADone={};
+let activeBlank=null, fillFilled={}, oxSel={}, chooseSel={};
+
+// ══ BUILD UI ══
+function buildExA(){
+  document.getElementById('exA').innerHTML = EX_A.map((e,i)=>`
+    <div class="ex-block"><div class="ex-row">
+      <div class="ex-num">${i+1}</div>
+      <div class="ex-content">
+        <div class="ex-kor">${e.kor.replace(/는 중이/g,'<span class="gram">는 중이</span>')}</div>
+        <div class="ex-eng">→ ${e.eng}</div>
+      </div>
+    </div></div>`).join('');
+}
+
+function buildExB(){
+  document.getElementById('exB').innerHTML = EX_B.map((e,i)=>`
+    <div class="ex-block"><div class="ex-row">
+      <div class="ex-num orange">${i+1}</div>
+      <div class="ex-content">
+        <div class="ex-kor">${e.kor.replace(/대신/g,'<span class="gram">대신</span>')}</div>
+        <div class="ex-eng">→ ${e.eng}</div>
+      </div>
+    </div></div>`).join('');
+}
+
+function buildDrillA(){
+  document.getElementById('drillABody').innerHTML = DRILL_A.map(r=>`
+    <tr class="${r.given?'given-row':''}">
+      <td class="num-cell">${r.n}</td>
+      <td><span class="base-word">${r.base}</span></td>
+      <td><span class="type-label">${r.type}</span></td>
+      <td>${r.given?`<span class="shown-ans">${r.ans}</span>`:`<input class="ans-input" id="da${r.n}" placeholder="____________">`}</td>
+      <td>${r.ex?`<span class="given-label">${r.ex}</span>`:`<input class="ex-field" id="dax${r.n}" placeholder="예문을 써 보세요...">`}</td>
+    </tr>`).join('');
+}
+
+function buildDrillB(){
+  document.getElementById('drillBBody').innerHTML = DRILL_B.map(r=>`
+    <tr class="${r.given?'given-row':''}">
+      <td class="num-cell">${r.n}</td>
+      <td><span class="base-word">${r.base}</span></td>
+      <td><span class="type-label">${r.type}</span></td>
+      <td>${r.given?`<span class="shown-ans" style="color:#065f46">${r.ans}</span>`:`<input class="ans-input" id="db${r.n}" placeholder="____________">`}</td>
+      <td>${r.ex?`<span class="given-label">${r.ex}</span>`:`<input class="ex-field" id="dbx${r.n}" placeholder="예문을 써 보세요...">`}</td>
+    </tr>`).join('');
+}
+
+function buildMatchA(){
+  document.getElementById('matchAL').innerHTML = MATCH_AL.map((m,i)=>`
+    <div class="match-item" id="${m.id}" onclick="selAL('${m.id}')">
+      <span class="match-badge">${i+1}</span>${m.text}
+    </div>`).join('');
+  const sh=[...MATCH_AR].sort(()=>Math.random()-.5);
+  document.getElementById('matchAR').innerHTML = sh.map((m,i)=>`
+    <div class="match-item" id="${m.id}" onclick="selAR('${m.id}')">
+      <span class="match-badge">${['ㄱ','ㄴ','ㄷ','ㄹ'][i]}</span>${m.text}
+    </div>`).join('');
+}
+
+function buildDialogA(){
+  document.getElementById('dialogA').innerHTML = DIALOG_A.map(d=>`
+    <div class="dialog-block">
+      <div class="dialog-row"><div class="d-label a">A</div><div class="d-body">${d.q}</div></div>
+      <div class="dialog-row"><div class="d-label b">B</div>
+        <div class="d-body">B: <input class="d-input" id="${d.id}" placeholder="${d.hint}"></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildOX(){
+  document.getElementById('oxList').innerHTML = OX_DATA.map((item,i)=>`
+    <div class="ox-item">
+      <div class="ox-num">${i+1}</div>
+      <div class="ox-wrap">
+        <div class="ox-text">${item.text}</div>
+        <div class="ox-btns">
+          <button class="ox-btn" id="btnO_${item.id}" onclick="pickOX('${item.id}','O')">O</button>
+          <button class="ox-btn" id="btnX_${item.id}" onclick="pickOX('${item.id}','X')">X</button>
+        </div>
+        ${item.correction?`<div class="ox-correction" id="corr_${item.id}"><div class="label">수정 (Correction)</div>${item.correction}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function buildBuild(){
+  document.getElementById('buildBody').innerHTML = BUILD_DATA.map(r=>`
+    <tr class="${r.isSample?'sample-row':''}">
+      <td class="topic-cell">${r.a}</td>
+      <td class="topic-cell" style="color:#475569;font-weight:400;">${r.b}</td>
+      <td>${r.isSample?`<span style="color:#059669;font-size:13px;font-style:italic;">${r.sample} ✅</span>`:`<input class="build-input" placeholder="${r.a}${r.b?` 대신에 ${r.b}...`:' 대신에...'}">`}</td>
+    </tr>`).join('');
+}
+
+function buildWordBank(){
+  document.getElementById('wbChips').innerHTML = WB_WORDS.map(w=>`
+    <span class="wb-chip" id="chip_${w.replace(/ /g,'_')}" onclick="selectChip('${w}')">${w}</span>`).join('');
+  document.getElementById('fillRows').innerHTML = FILL_DATA.map((f,i)=>`
+    <div class="fill-row">
+      <span class="fill-n">${i+1}.</span>
+      <span class="fill-text">${f.pre}</span>
+      <span class="fill-blank" id="blank_${f.id}" onclick="clickBlank('${f.id}')">클릭</span>
+      <span class="fill-text">${f.suf}</span>
+    </div>`).join('');
+}
+
+function buildChoose(){
+  document.getElementById('chooseArea').innerHTML = CHOOSE_DATA.map((c,i)=>`
+    <div class="choose-row">
+      <span class="choose-n">${i+1}.</span>
+      <span style="font-size:15px;flex:1;">${c.pre} (
+        ${c.opts.map(o=>`<button class="choose-btn" id="cb_${c.id}_${o.replace(/ /g,'_')}" onclick="pickChoose('${c.id}','${o}')">${o}</button>`).join(' / ')}
+      ) ${c.post||''}</span>
+    </div>`).join('');
+}
+
+function buildCFill(){
+  document.getElementById('cFillArea').innerHTML = CFILL_DATA.map((f,i)=>`
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;">
+      <span style="font-size:12px;font-weight:800;color:#6d28d9;">${i+1}.</span>
+      <span style="font-size:15px;line-height:2.2;margin-left:8px;">
+        ${f.pre}<input class="cblank-input" id="${f.id}" placeholder="${f.ph}">${f.suf}
+      </span>
+    </div>`).join('');
+}
+
+function buildChat(){
+  const turns=['A','B','A','B','A'];
+  document.getElementById('chatArea').innerHTML = turns.map((l,i)=>`
+    <div class="chat-block"><div class="chat-row">
+      <div class="chat-lbl ${l.toLowerCase()}">${l}</div>
+      <div class="chat-body"><input class="chat-inp" id="chat${i}" placeholder="${l==='A'?'말을 써 보세요...':'대답을 써 보세요...'}"></div>
+    </div></div>`).join('');
+}
+
+// ══ MATCH ══
+function selAL(id){
+  if(matchADone[id]) return;
+  if(matchASelL===id){matchASelL=null;document.getElementById(id).classList.remove('selected');return;}
+  if(matchASelL) document.getElementById(matchASelL)?.classList.remove('selected');
+  matchASelL=id; document.getElementById(id).classList.add('selected'); tryMatchA();
+}
+function selAR(id){
+  if(Object.values(matchADone).includes(id)) return;
+  if(matchASelR===id){matchASelR=null;document.getElementById(id).classList.remove('selected');return;}
+  if(matchASelR) document.getElementById(matchASelR)?.classList.remove('selected');
+  matchASelR=id; document.getElementById(id).classList.add('selected'); tryMatchA();
+}
+function tryMatchA(){
+  if(!matchASelL||!matchASelR) return;
+  const rd=MATCH_AR.find(r=>r.id===matchASelR);
+  const lEl=document.getElementById(matchASelL), rEl=document.getElementById(matchASelR);
+  if(rd.pair===matchASelL){
+    lEl.classList.replace('selected','matched-ok'); rEl.classList.replace('selected','matched-ok');
+    matchADone[matchASelL]=matchASelR;
+    const d=Object.keys(matchADone).length;
+    document.getElementById('matchAScore').textContent=`${d} / ${MATCH_AL.length}`;
+    if(d===MATCH_AL.length) document.getElementById('matchAFB').textContent='🎉 완벽해요!';
+    updateTotal();
+  } else {
+    lEl.classList.add('matched-err'); rEl.classList.add('matched-err');
+    setTimeout(()=>{lEl.classList.remove('matched-err','selected');rEl.classList.remove('matched-err','selected');},500);
+  }
+  matchASelL=null; matchASelR=null;
+}
+function resetMatchA(){matchADone={};matchASelL=null;matchASelR=null;document.getElementById('matchAScore').textContent='-';document.getElementById('matchAFB').textContent='';buildMatchA();}
+
+// ══ OX ══
+function pickOX(id,val){
+  oxSel[id]=val;
+  document.getElementById(`btnO_${id}`).className='ox-btn'+(val==='O'?' sel-o':'');
+  document.getElementById(`btnX_${id}`).className='ox-btn'+(val==='X'?' sel-x':'');
+}
+
+// ══ WORD BANK ══
+function clickBlank(fid){
+  activeBlank=fid;
+  document.querySelectorAll('.fill-blank').forEach(b=>b.classList.remove('active-blank'));
+  document.getElementById('blank_'+fid).classList.add('active-blank');
+}
+function selectChip(word){
+  if(!activeBlank){alert('먼저 빈칸을 클릭하세요!');return;}
+  const prev=Object.entries(fillFilled).find(([k,v])=>v===word);
+  if(prev){fillFilled[prev[0]]='';renderBlank(prev[0],'');document.getElementById('chip_'+word.replace(/ /g,'_'))?.classList.remove('used');}
+  fillFilled[activeBlank]=word; renderBlank(activeBlank,word);
+  document.getElementById('chip_'+word.replace(/ /g,'_')).classList.add('used');
+  document.querySelectorAll('.fill-blank').forEach(b=>b.classList.remove('active-blank'));
+  activeBlank=null;
+}
+function renderBlank(fid,word){
+  const el=document.getElementById('blank_'+fid);
+  el.textContent=word||'클릭';
+  el.className='fill-blank'+(word?' filled':'');
+}
+function resetFill(){
+  fillFilled={};activeBlank=null;
+  FILL_DATA.forEach(f=>renderBlank(f.id,''));
+  WB_WORDS.forEach(w=>{const c=document.getElementById('chip_'+w.replace(/ /g,'_'));if(c)c.classList.remove('used');});
+  document.getElementById('fillScore').textContent='-';
+  document.getElementById('fillFB').textContent='';
+}
+
+// ══ CHOOSE ══
+function pickChoose(id,val){
+  chooseSel[id]=val;
+  const c=CHOOSE_DATA.find(x=>x.id===id);
+  c.opts.forEach(o=>document.getElementById(`cb_${id}_${o.replace(/ /g,'_')}`).className='choose-btn'+(val===o?' sel':''));
+}
+
+// ══ CHECK ══
+function checkDrillA(){
+  let s=0,t=0;
+  DRILL_A.filter(r=>!r.given).forEach(r=>{
+    t++; const inp=document.getElementById('da'+r.n); if(!inp) return;
+    const ok=inp.value.trim()===r.ans;
+    inp.classList.toggle('correct',ok); inp.classList.toggle('wrong',!ok);
+    if(ok) s++;
+  });
+  document.getElementById('drillAScore').textContent=`${s} / ${t}`;
+  document.getElementById('drillAFB').textContent=s===t?'🎉 완벽해요!':s>=t/2?'👍 잘하고 있어요!':'💪 다시 해봐요!';
+  updateTotal();
+}
+
+function checkDrillB(){
+  let s=0,t=0;
+  DRILL_B.filter(r=>!r.given).forEach(r=>{
+    t++; const inp=document.getElementById('db'+r.n); if(!inp) return;
+    const ok=inp.value.trim()===r.ans;
+    inp.classList.toggle('correct',ok); inp.classList.toggle('wrong',!ok);
+    if(ok) s++;
+  });
+  document.getElementById('drillBScore').textContent=`${s} / ${t}`;
+  document.getElementById('drillBFB').textContent=s===t?'🎉 완벽해요!':s>=t/2?'👍 잘하고 있어요!':'💪 다시 해봐요!';
+  updateTotal();
+}
+
+function checkOX(){
+  let s=0;
+  OX_DATA.forEach(item=>{
+    const sel=oxSel[item.id]; if(!sel) return;
+    const ok=sel===item.ans;
+    document.getElementById(`btnO_${item.id}`).className='ox-btn'+(item.ans==='O'?' is-correct':sel==='O'?' is-wrong':'');
+    document.getElementById(`btnX_${item.id}`).className='ox-btn'+(item.ans==='X'?' is-correct':sel==='X'?' is-wrong':'');
+    if(ok) s++;
+    else if(item.correction){const c=document.getElementById(`corr_${item.id}`);if(c)c.style.display='block';}
+  });
+  document.getElementById('oxScore').textContent=`${s} / ${OX_DATA.length}`;
+  document.getElementById('oxFB').textContent=s===OX_DATA.length?'🎉 완벽해요!':'틀린 것을 다시 확인해봐요!';
+  updateTotal();
+}
+
+function checkFill(){
+  let s=0;
+  FILL_DATA.forEach(f=>{
+    const filled=fillFilled[f.id]||'';
+    const ok=filled===f.ans;
+    const el=document.getElementById('blank_'+f.id);
+    el.className='fill-blank '+(ok?'filled':'wrong-fill');
+    if(ok) s++;
+  });
+  document.getElementById('fillScore').textContent=`${s} / ${FILL_DATA.length}`;
+  document.getElementById('fillFB').textContent=s===FILL_DATA.length?'🎉 완벽해요!':'다시 확인해봐요!';
+  updateTotal();
+}
+
+function checkChoose(){
+  let s=0;
+  CHOOSE_DATA.forEach(c=>{
+    const sel=chooseSel[c.id]; if(!sel) return;
+    const ok=sel===c.ans;
+    c.opts.forEach(o=>{
+      const btn=document.getElementById(`cb_${c.id}_${o.replace(/ /g,'_')}`);
+      if(!btn) return;
+      if(o===c.ans) btn.className='choose-btn correct-pick';
+      else if(o===sel&&!ok) btn.className='choose-btn wrong-pick';
+      else btn.className='choose-btn';
+    });
+    if(ok) s++;
+  });
+  document.getElementById('chooseScore').textContent=`${s} / ${CHOOSE_DATA.length}`;
+  document.getElementById('chooseFB').textContent=s===CHOOSE_DATA.length?'🎉 완벽해요!':'틀린 것을 확인해봐요!';
+  updateTotal();
+}
+
+function checkChat(){
+  const all=[0,1,2,3,4].map(i=>document.getElementById('chat'+i)?.value||'').join(' ');
+  const hj=all.includes('중이');
+  const hd=all.includes('대신');
+  const jEl=document.getElementById('hasJung'), dEl=document.getElementById('hasDaesin');
+  jEl.textContent=hj?'✅ 사용했어요!':'⬜ 아직...'; jEl.style.color=hj?'#059669':'#dc2626';
+  dEl.textContent=hd?'✅ 사용했어요!':'⬜ 아직...'; dEl.style.color=hd?'#059669':'#dc2626';
+}
+
+function updateTotal(){
+  let s=0,p=0;
+  [['drillAScore',DRILL_A.filter(r=>!r.given).length],['drillBScore',DRILL_B.filter(r=>!r.given).length],
+   ['oxScore',OX_DATA.length],['fillScore',FILL_DATA.length],['chooseScore',CHOOSE_DATA.length]].forEach(([id,total])=>{
+    const m=document.getElementById(id).textContent.match(/(\d+)\s*\/\s*(\d+)/);
+    if(m){s+=+m[1];p+=+m[2];}
+  });
+  s+=Object.keys(matchADone).length; p+=MATCH_AL.length;
+  document.getElementById('totalScore').textContent=s;
+  document.getElementById('totalPoss').textContent=p;
+}
+
+function switchTab(t){
+  ['a','b','c'].forEach(id=>document.getElementById('panel'+id.toUpperCase()).classList.toggle('active',id===t));
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['a','b','c'][i]===t));
+}
+
+function resetAll(){if(!confirm('정말 초기화할까요?')) return; location.reload();}
+
+// INIT
+buildExA(); buildExB(); buildDrillA(); buildDrillB();
+buildMatchA(); buildDialogA(); buildOX(); buildBuild();
+buildWordBank(); buildChoose(); buildCFill(); buildChat();
+</script>
+</body>
+</html>

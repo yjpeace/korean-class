@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 02 어휘 학습 | 텔레비전 앞으로</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1B4F8A; --blue2:#2563B0; --orange:#E07B30; --orange2:#c85e10;
+  --green:#059669; --red:#dc2626; --purple:#7c3aed;
+  --card:#fff; --card2:#f8fafc; --border:rgba(0,0,0,0.09); --border2:rgba(0,0,0,0.14);
+  --text:#1e293b; --muted:#64748b;
+}
+html,body{min-height:100vh;font-family:'DM Sans','Noto Sans KR',sans-serif;background:#eef2f7;color:var(--text);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 10% 0%,rgba(37,99,176,0.06) 0%,transparent 55%),
+             radial-gradient(ellipse 50% 35% at 90% 100%,rgba(224,123,48,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+
+header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 32px;background:rgba(255,255,255,0.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);box-shadow:0 1px 12px rgba(0,0,0,0.07);}
+.hd-left{display:flex;align-items:center;gap:12px;}
+.hd-badge{background:var(--blue);color:#fff;font-weight:800;font-size:11px;letter-spacing:.6px;padding:4px 10px;border-radius:6px;text-transform:uppercase;}
+.hd-title{font-size:14px;font-weight:700;}
+.hd-sub{font-size:11px;color:var(--muted);}
+.hd-right{display:flex;align-items:center;gap:10px;}
+.progress-wrap{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
+.progress-bar{width:120px;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .4s;}
+.btn-sm{background:#f1f5f9;border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-sm:hover{background:#e2e8f0;}
+
+.tabs{display:flex;gap:4px;padding:18px 24px 0;position:relative;z-index:1;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:12px 12px 0 0;background:rgba(255,255,255,0.7);border:1px solid var(--border);border-bottom:none;color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.tab.active{background:#fff;color:#1e40af;border-color:var(--border2);font-weight:700;}
+.tab:hover:not(.active){background:rgba(255,255,255,0.9);}
+
+.panel{display:none;position:relative;z-index:1;margin:0 18px 32px;background:#fff;
+  border:1px solid var(--border2);border-radius:0 16px 16px 16px;
+  padding:28px 32px;box-shadow:0 2px 20px rgba(0,0,0,0.06);}
+.panel.active{display:block;}
+
+/* ── FLASHCARDS ── */
+.fc-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.fc-counter{font-size:13px;font-weight:600;color:var(--muted);}
+.fc-btns{display:flex;gap:8px;}
+.btn-nav{background:#f1f5f9;border:1px solid var(--border);border-radius:10px;padding:8px 20px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--text);transition:all .2s;}
+.btn-nav:hover:not(:disabled){background:#e2e8f0;}
+.btn-nav:disabled{opacity:.35;cursor:default;}
+.btn-flip{background:var(--blue2);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-flip:hover{background:#1d4ed8;}
+
+.card-scene{perspective:1000px;width:100%;max-width:600px;height:220px;margin:0 auto 20px;}
+.card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 32px;text-align:center;}
+.card-front{background:linear-gradient(135deg,#1B4F8A 0%,#2563B0 100%);color:#fff;box-shadow:0 8px 32px rgba(27,79,138,0.25);}
+.card-back{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border:2px solid var(--border2);transform:rotateY(180deg);box-shadow:0 8px 32px rgba(0,0,0,0.08);}
+.card-label{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;opacity:.6;margin-bottom:12px;}
+.card-word{font-size:32px;font-weight:800;line-height:1.2;margin-bottom:8px;}
+.card-sub{font-size:14px;opacity:.75;line-height:1.5;}
+.card-back .card-word{font-size:22px;color:var(--text);line-height:1.4;}
+.card-back .card-sub{font-size:13px;color:var(--muted);margin-top:8px;}
+.card-example{font-size:13px;color:var(--blue2);font-style:italic;margin-top:10px;line-height:1.5;}
+.card-hint{font-size:12px;color:var(--muted);margin-top:16px;}
+
+.fc-dots{display:flex;justify-content:center;gap:6px;margin-bottom:16px;}
+.dot{width:8px;height:8px;border-radius:50%;background:#e2e8f0;transition:all .2s;}
+.dot.active{background:var(--blue2);transform:scale(1.3);}
+.dot.done{background:#a7f3d0;}
+
+/* ── WORD LIST ── */
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.word-card{background:#f8fafc;border:1px solid var(--border2);border-radius:14px;padding:16px 18px;transition:all .2s;cursor:default;}
+.word-card:hover{border-color:#93c5fd;box-shadow:0 2px 12px rgba(37,99,176,0.1);}
+.wc-kor{font-size:18px;font-weight:800;color:var(--blue2);margin-bottom:4px;}
+.wc-eng{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.wc-ex{font-size:12px;color:var(--muted);line-height:1.5;font-style:italic;}
+.wc-num{font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;border-radius:99px;padding:2px 8px;display:inline-block;margin-bottom:8px;}
+
+/* ── MATCHING GAME ── */
+.match-instructions{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px 18px;font-size:14px;color:#1e40af;margin-bottom:20px;}
+.match-game-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.match-col-head{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.mg-item{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.4;cursor:pointer;transition:all .18s;user-select:none;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.mg-item:hover{border-color:#93c5fd;background:#eff6ff;}
+.mg-item.selected{border-color:#3b82f6;background:#eff6ff;}
+.mg-item.matched{border-color:#059669;background:#f0fdf4;cursor:default;animation:pop .3s;}
+.mg-item.wrong{border-color:#dc2626;background:#fef2f2;animation:shake .3s;}
+.mg-badge{min-width:26px;height:26px;border-radius:7px;background:#e2e8f0;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.mg-item.selected .mg-badge{background:#3b82f6;color:#fff;}
+.mg-item.matched .mg-badge{background:#059669;color:#fff;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes pop{0%{transform:scale(.95)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+.match-score-bar{display:flex;align-items:center;justify-content:space-between;margin-top:16px;}
+.match-score{font-size:14px;font-weight:700;}
+.match-score .s{color:#d97706;}
+
+/* ── QUIZ ── */
+.quiz-wrap{max-width:560px;margin:0 auto;}
+.quiz-progress{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.quiz-bar{flex:1;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;}
+.quiz-fill{height:100%;background:linear-gradient(90deg,#2563B0,#7c3aed);border-radius:99px;transition:width .4s;}
+.quiz-counter{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;}
+.quiz-question{background:linear-gradient(135deg,#1B4F8A,#2563B0);border-radius:18px;padding:24px 28px;color:#fff;margin-bottom:20px;text-align:center;}
+.quiz-q-label{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;opacity:.6;margin-bottom:10px;}
+.quiz-q-word{font-size:28px;font-weight:800;line-height:1.3;}
+.quiz-q-hint{font-size:13px;opacity:.7;margin-top:6px;font-style:italic;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.4;cursor:pointer;transition:all .18s;font-family:inherit;text-align:left;color:var(--text);}
+.quiz-opt:hover:not(:disabled){border-color:#93c5fd;background:#eff6ff;}
+.quiz-opt.correct{border-color:#059669!important;background:#f0fdf4!important;color:#065f46!important;}
+.quiz-opt.wrong{border-color:#dc2626!important;background:#fef2f2!important;color:#b91c1c!important;}
+.quiz-opt:disabled{cursor:default;}
+.quiz-result{text-align:center;padding:8px;font-size:14px;font-weight:700;min-height:24px;}
+.quiz-result.ok{color:#059669;}
+.quiz-result.ng{color:#dc2626;}
+.quiz-actions{display:flex;justify-content:center;gap:10px;margin-top:8px;}
+.btn-next{background:var(--orange);color:#fff;border:none;border-radius:12px;padding:11px 28px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(224,123,48,0.25);}
+.btn-next:hover{background:#c86e28;transform:translateY(-1px);}
+.btn-next:disabled{opacity:.4;cursor:default;transform:none;}
+.quiz-final{text-align:center;padding:32px 20px;}
+.quiz-final .big{font-size:48px;margin-bottom:12px;}
+.quiz-final .title{font-size:22px;font-weight:800;margin-bottom:8px;}
+.quiz-final .sub{font-size:15px;color:var(--muted);}
+.quiz-score-big{font-size:40px;font-weight:800;color:var(--blue2);margin:16px 0;}
+
+.divider{height:1px;background:#e2e8f0;margin:26px 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-left">
+    <div class="hd-badge">NAKS 4-2</div>
+    <div>
+      <div class="hd-title">Unit 02 어휘 학습 · Vocabulary Study</div>
+      <div class="hd-sub">텔레비전 앞으로 · 16개 단어</div>
+    </div>
+  </div>
+  <div class="hd-right">
+    <div class="progress-wrap">
+      <span id="progressLabel">0 / 16</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <button class="btn-sm" onclick="resetAll()">🔄 초기화</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('fc')">🃏 플래시카드</button>
+  <button class="tab" onclick="switchTab('list')">📋 단어 목록</button>
+  <button class="tab" onclick="switchTab('match')">🔗 매칭 게임</button>
+  <button class="tab" onclick="switchTab('quiz')">📝 퀴즈</button>
+</div>
+
+<!-- ══ FLASHCARD ══ -->
+<div class="panel active" id="panelFc">
+  <div class="fc-nav">
+    <div class="fc-counter"><span id="fcIdx">1</span> / 16</div>
+    <div class="fc-btns">
+      <button class="btn-nav" id="btnPrev" onclick="fcMove(-1)" disabled>← 이전</button>
+      <button class="btn-flip" onclick="fcFlip()">🔄 뒤집기</button>
+      <button class="btn-nav" id="btnNext" onclick="fcMove(1)">다음 →</button>
+    </div>
+  </div>
+
+  <div class="fc-dots" id="fcDots"></div>
+
+  <div class="card-scene" onclick="fcFlip()">
+    <div class="card-inner" id="cardInner">
+      <div class="card-face card-front">
+        <div class="card-label">한국어 Korean</div>
+        <div class="card-word" id="fcKor">뉴스</div>
+        <div class="card-sub" id="fcSub"></div>
+        <div class="card-hint">클릭하면 뒤집혀요 🔄</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">English 영어</div>
+        <div class="card-word" id="fcEng"></div>
+        <div class="card-example" id="fcEx"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;">
+    <button class="btn-nav" onclick="fcShuffle()" style="background:#ede9fe;border-color:#c4b5fd;color:#5b21b6;">🔀 섞기</button>
+    <button class="btn-nav" onclick="fcReset()" style="background:#f0fdf4;border-color:#a7f3d0;color:#065f46;">↩ 처음부터</button>
+  </div>
+</div>
+
+<!-- ══ WORD LIST ══ -->
+<div class="panel" id="panelList">
+  <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div style="font-size:16px;font-weight:700;">📋 전체 단어 목록 · All Vocabulary (16개)</div>
+    <input id="searchInput" oninput="filterWords()" placeholder="🔍 단어 검색..." style="background:#f8fafc;border:1.5px solid var(--border2);border-radius:10px;padding:8px 14px;font-size:14px;font-family:inherit;outline:none;width:200px;color:var(--text);">
+  </div>
+  <div class="word-grid" id="wordGrid"></div>
+</div>
+
+<!-- ══ MATCH ══ -->
+<div class="panel" id="panelMatch">
+  <div class="match-instructions">💡 한국어 단어와 영어 뜻을 클릭해서 연결하세요! 모두 맞추면 다음 세트로 넘어가요.</div>
+  <div id="matchGameArea"></div>
+  <div class="match-score-bar">
+    <div class="match-score">점수: <span class="s" id="matchGameScore">0</span> / 16</div>
+    <button class="btn-sm" onclick="buildMatchGame()">🔀 다시 섞기</button>
+  </div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div class="panel" id="panelQuiz">
+  <div class="quiz-wrap" id="quizWrap"></div>
+</div>
+
+<script>
+const VOCAB = [
+  {kor:'뉴스',           eng:'news (TV news program)',                   ex:'저는 매일 저녁 뉴스를 시청해요.',          exEng:'I watch the news every evening.'},
+  {kor:'예능',           eng:'entertainment / variety show',             ex:'예능 프로그램은 정말 재미있어요.',           exEng:'Variety shows are really fun.'},
+  {kor:'드라마',         eng:'TV drama / series',                        ex:'요즘 한국 드라마가 인기가 많아요.',          exEng:'Korean dramas are popular.'},
+  {kor:'오락',           eng:'entertainment / amusement',                ex:'오락 프로그램을 보면서 스트레스를 풀어요.',  exEng:'I relieve stress watching entertainment programs.'},
+  {kor:'스포츠',         eng:'sports (program)',                         ex:'스포츠 중계방송을 좋아해요.',               exEng:'I like watching sports broadcasts.'},
+  {kor:'코미디',         eng:'comedy (program)',                         ex:'코미디 프로그램을 보면 웃음이 나요.',       exEng:'Comedy programs make me laugh.'},
+  {kor:'다큐멘터리',     eng:'documentary',                              ex:'다큐멘터리로 간접 경험을 해요.',            exEng:'I have vicarious experiences through documentaries.'},
+  {kor:'퀴즈',           eng:'quiz (program)',                           ex:'퀴즈 프로그램에서 문제를 풀어요.',          exEng:'I solve problems on a quiz show.'},
+  {kor:'실화',           eng:'true story / based on real events',        ex:'이 드라마는 실화를 바탕으로 했어요.',       exEng:'This drama is based on a true story.'},
+  {kor:'시청하다',       eng:'to watch (TV) / to view',                  ex:'매일 밤 드라마를 시청해요.',               exEng:'I watch dramas every night.'},
+  {kor:'자막',           eng:'subtitles / captions',                     ex:'자막 없이 한국어를 이해하고 싶어요.',       exEng:'I want to understand Korean without subtitles.'},
+  {kor:'감동적이다',     eng:'to be touching / moving / emotional',      ex:'그 드라마는 정말 감동적이었어요.',          exEng:'That drama was really moving.'},
+  {kor:'기대가 되다',    eng:'to look forward to / to be excited about', ex:'다음 화가 너무 기대가 돼요.',              exEng:'I\'m really looking forward to the next episode.'},
+  {kor:'생방송',         eng:'live broadcast',                           ex:'지금 생방송으로 경기를 보는 중이에요.',     exEng:'I\'m watching the game live right now.'},
+  {kor:'간접 경험을 하다',eng:'to have a vicarious / indirect experience',ex:'다큐멘터리를 보면서 간접 경험을 해요.',   exEng:'I have vicarious experiences watching documentaries.'},
+  {kor:'중계방송',       eng:'broadcast relay / live coverage',          ex:'월드컵 중계방송을 온 가족이 봤어요.',       exEng:'The whole family watched the World Cup broadcast.'},
+];
+
+// ══ FLASHCARD STATE ══
+let fcOrder = VOCAB.map((_,i)=>i);
+let fcCurrent = 0;
+let fcFlipped = false;
+let studiedSet = new Set();
+
+function buildDots(){
+  document.getElementById('fcDots').innerHTML = fcOrder.map((_,i)=>
+    `<div class="dot${i===fcCurrent?' active':''}" id="dot${i}"></div>`).join('');
+}
+function updateDots(){
+  fcOrder.forEach((_,i)=>{
+    const el=document.getElementById('dot'+i);
+    if(!el) return;
+    el.className='dot'+(i===fcCurrent?' active':studiedSet.has(i)?' done':'');
+  });
+}
+function updateCard(){
+  const v=VOCAB[fcOrder[fcCurrent]];
+  document.getElementById('fcKor').textContent=v.kor;
+  document.getElementById('fcSub').textContent='';
+  document.getElementById('fcEng').textContent=v.eng;
+  document.getElementById('fcEx').textContent=`"${v.ex}"`;
+  document.getElementById('fcIdx').textContent=fcCurrent+1;
+  document.getElementById('btnPrev').disabled=fcCurrent===0;
+  document.getElementById('btnNext').disabled=fcCurrent===fcOrder.length-1;
+  const ci=document.getElementById('cardInner');
+  if(fcFlipped){fcFlipped=false; ci.classList.remove('flipped');}
+  updateDots();
+  studiedSet.add(fcCurrent);
+  updateProgress();
+}
+function fcFlip(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('cardInner').classList.toggle('flipped',fcFlipped);
+}
+function fcMove(dir){
+  fcCurrent=Math.max(0,Math.min(fcOrder.length-1,fcCurrent+dir));
+  updateCard();
+}
+function fcShuffle(){
+  for(let i=fcOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrder[i],fcOrder[j]]=[fcOrder[j],fcOrder[i]];}
+  fcCurrent=0; fcFlipped=false; buildDots(); updateCard();
+}
+function fcReset(){fcOrder=VOCAB.map((_,i)=>i);fcCurrent=0;fcFlipped=false;buildDots();updateCard();}
+
+// ══ WORD LIST ══
+function buildWordList(){
+  renderWordGrid(VOCAB);
+}
+function renderWordGrid(words){
+  document.getElementById('wordGrid').innerHTML = words.map((v,i)=>`
+    <div class="word-card">
+      <div class="wc-num">${(VOCAB.indexOf(v)+1).toString().padStart(2,'0')}</div>
+      <div class="wc-kor">${v.kor}</div>
+      <div class="wc-eng">${v.eng}</div>
+      <div class="wc-ex">"${v.ex}"</div>
+    </div>`).join('');
+}
+function filterWords(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=VOCAB.filter(v=>v.kor.includes(q)||v.eng.toLowerCase().includes(q)||v.ex.includes(q));
+  renderWordGrid(filtered);
+}
+
+// ══ MATCH GAME ══
+let mgSelL=null, mgSelR=null, mgDone={}, mgCurrentSet=0;
+const MATCH_SETS=[
+  [0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15]
+];
+
+function buildMatchGame(){
+  mgSelL=null; mgSelR=null; mgDone={};
+  const set=MATCH_SETS[mgCurrentSet%MATCH_SETS.length];
+  const items=set.map(i=>VOCAB[i]);
+  const shuffledR=[...items].sort(()=>Math.random()-.5);
+  document.getElementById('matchGameArea').innerHTML=`
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;">세트 ${(mgCurrentSet%MATCH_SETS.length)+1} / ${MATCH_SETS.length}</div>
+    <div class="match-game-wrap">
+      <div>
+        <div class="match-col-head">🇰🇷 한국어</div>
+        ${items.map((v,i)=>`<div class="mg-item" id="mgl${i}" onclick="selMgL(${i},'${v.kor}')"><span class="match-badge">${i+1}</span>${v.kor}</div>`).join('')}
+      </div>
+      <div>
+        <div class="match-col-head">🇺🇸 English</div>
+        ${shuffledR.map((v,i)=>`<div class="mg-item" id="mgr${i}" onclick="selMgR(${i},'${v.kor}')"><span class="match-badge">${['A','B','C','D'][i]}</span>${v.eng}</div>`).join('')}
+      </div>
+    </div>`;
+  mgCurrentSet++;
+}
+
+function selMgL(i, kor){
+  if(Object.keys(mgDone).some(k=>mgDone[k]===kor||k===kor)) return;
+  if(mgSelL!==null) document.getElementById('mgl'+mgSelL)?.classList.remove('selected');
+  mgSelL=i; document.getElementById('mgl'+i).classList.add('selected'); tryMgMatch();
+}
+function selMgR(i, kor){
+  if(Object.values(mgDone).includes(kor)) return;
+  if(mgSelR!==null) document.getElementById('mgr'+mgSelR)?.classList.remove('selected');
+  mgSelR=i; document.getElementById('mgr'+i).classList.add('selected'); tryMgMatch();
+}
+function tryMgMatch(){
+  if(mgSelL===null||mgSelR===null) return;
+  const lEl=document.getElementById('mgl'+mgSelL);
+  const rEl=document.getElementById('mgr'+mgSelR);
+  const lKor=lEl.querySelector('.mg-item')?.dataset?.kor || lEl.textContent.replace(/[0-9]/g,'').trim();
+  const rKorMatch=rEl.dataset?.korMatch;
+  // check: find the vocab item for left
+  const set=MATCH_SETS[(mgCurrentSet-1)%MATCH_SETS.length];
+  const lVocab=VOCAB[set[mgSelL]];
+  const rText=rEl.textContent.replace(/[A-D]/,'').trim();
+  const ok=lVocab.eng===rText;
+  if(ok){
+    lEl.classList.replace('selected','matched'); rEl.classList.replace('selected','matched');
+    mgDone[mgSelL]=mgSelR;
+    const doneCount=Object.keys(mgDone).length;
+    document.getElementById('matchGameScore').textContent=((mgCurrentSet-1)*4+doneCount);
+    if(doneCount===4){
+      setTimeout(()=>{if(mgCurrentSet<MATCH_SETS.length) buildMatchGame();},800);
+    }
+    updateProgress();
+  } else {
+    lEl.classList.add('wrong'); rEl.classList.add('wrong');
+    setTimeout(()=>{lEl.classList.remove('wrong','selected');rEl.classList.remove('wrong','selected');},600);
+  }
+  mgSelL=null; mgSelR=null;
+}
+
+// ══ QUIZ ══
+let quizItems=[], quizCurrent=0, quizScore=0, quizAnswered=false;
+
+function buildQuiz(){
+  quizItems=[...VOCAB].sort(()=>Math.random()-.5);
+  quizCurrent=0; quizScore=0; quizAnswered=false;
+  renderQuiz();
+}
+
+function renderQuiz(){
+  if(quizCurrent>=quizItems.length){
+    const pct=Math.round(quizScore/quizItems.length*100);
+    document.getElementById('quizWrap').innerHTML=`
+      <div class="quiz-final">
+        <div class="big">${pct>=80?'🎉':pct>=60?'👍':'💪'}</div>
+        <div class="title">${pct>=80?'완벽해요!':pct>=60?'잘했어요!':'조금 더 연습해요!'}</div>
+        <div class="quiz-score-big">${quizScore} / ${quizItems.length}</div>
+        <div class="sub">${pct}% 정답률</div>
+        <div class="quiz-actions" style="margin-top:20px;">
+          <button class="btn-next" onclick="buildQuiz()">🔄 다시 풀기</button>
+        </div>
+      </div>`;
+    return;
+  }
+  const q=quizItems[quizCurrent];
+  const wrong=[...VOCAB].filter(v=>v!==q).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[...wrong,q].sort(()=>Math.random()-.5);
+  const pct=Math.round(quizCurrent/quizItems.length*100);
+  document.getElementById('quizWrap').innerHTML=`
+    <div class="quiz-progress">
+      <div class="quiz-bar"><div class="quiz-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-counter">${quizCurrent+1} / ${quizItems.length}</div>
+    </div>
+    <div class="quiz-question">
+      <div class="quiz-q-label">이 단어의 영어 뜻은? What does this mean?</div>
+      <div class="quiz-q-word">${q.kor}</div>
+      <div class="quiz-q-hint">"${q.ex}"</div>
+    </div>
+    <div class="quiz-options">
+      ${opts.map(o=>`<button class="quiz-opt" onclick="answerQuiz(this,'${o.kor}','${q.kor}')">${o.eng}</button>`).join('')}
+    </div>
+    <div class="quiz-result" id="quizResult"></div>
+    <div class="quiz-actions">
+      <button class="btn-next" id="btnQNext" onclick="nextQuiz()" disabled>다음 →</button>
+    </div>`;
+}
+
+function answerQuiz(btn, chosen, correct){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const isOk=chosen===correct;
+  document.querySelectorAll('.quiz-opt').forEach(b=>{
+    const bKor=b.textContent;
+    const v=VOCAB.find(x=>x.eng===bKor);
+    if(v&&v.kor===correct) b.classList.add('correct');
+    else if(b===btn&&!isOk) b.classList.add('wrong');
+    b.disabled=true;
+  });
+  if(isOk){quizScore++; document.getElementById('quizResult').className='quiz-result ok'; document.getElementById('quizResult').textContent='✅ 정답이에요!';}
+  else{document.getElementById('quizResult').className='quiz-result ng'; document.getElementById('quizResult').textContent=`❌ 정답: ${VOCAB.find(v=>v.kor===correct).eng}`;}
+  document.getElementById('btnQNext').disabled=false;
+  updateProgress();
+}
+function nextQuiz(){quizAnswered=false; quizCurrent++; renderQuiz();}
+
+// ══ PROGRESS ══
+function updateProgress(){
+  const total=16;
+  const done=Math.min(total, studiedSet.size + quizScore);
+  document.getElementById('progressLabel').textContent=`${done} / ${total}`;
+  document.getElementById('progressFill').style.width=`${done/total*100}%`;
+}
+
+// ══ TABS ══
+function switchTab(t){
+  ['fc','list','match','quiz'].forEach(id=>document.getElementById('panel'+id.charAt(0).toUpperCase()+id.slice(1)).classList.toggle('active',id===t));
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['fc','list','match','quiz'][i]===t));
+  if(t==='match'&&!document.getElementById('matchGameArea').innerHTML) buildMatchGame();
+  if(t==='quiz'&&!document.getElementById('quizWrap').innerHTML) buildQuiz();
+}
+
+function resetAll(){if(!confirm('초기화할까요?')) return; location.reload();}
+
+// INIT
+buildDots(); updateCard(); buildWordList();
+</script>
+</body>
+</html>
